@@ -1,0 +1,1 @@
+/usr/bin/cc  -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/Image_Segmentation.dir/main.c.o  -o Image_Segmentation 
