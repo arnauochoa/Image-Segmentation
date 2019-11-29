@@ -38,8 +38,8 @@
 				</MakeCommands>
 			</Target>
 			<Target title="Image_Segmentation">
-				<Option output="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/cmake-build-debug/Image_Segmentation" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/cmake-build-debug"/>
+				<Option output="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/BUILD/Image_Segmentation" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/BUILD"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -58,8 +58,8 @@
 				</MakeCommands>
 			</Target>
 			<Target title="Image_Segmentation/fast">
-				<Option output="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/cmake-build-debug/Image_Segmentation" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/cmake-build-debug"/>
+				<Option output="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/BUILD/Image_Segmentation" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/BUILD"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -78,7 +78,13 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/main.c">
+		<Unit filename="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.c">
+			<Option target="Image_Segmentation"/>
+		</Unit>
+		<Unit filename="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.h">
+			<Option target="Image_Segmentation"/>
+		</Unit>
+		<Unit filename="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/main.c">
 			<Option target="Image_Segmentation"/>
 		</Unit>
 		<Unit filename="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/CMakeLists.txt">

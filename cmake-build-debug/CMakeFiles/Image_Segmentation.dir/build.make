@@ -57,34 +57,49 @@ include CMakeFiles/Image_Segmentation.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/Image_Segmentation.dir/flags.make
 
-CMakeFiles/Image_Segmentation.dir/main.c.o: CMakeFiles/Image_Segmentation.dir/flags.make
-CMakeFiles/Image_Segmentation.dir/main.c.o: ../main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Image_Segmentation.dir/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Image_Segmentation.dir/main.c.o   -c "/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/main.c"
+CMakeFiles/Image_Segmentation.dir/src/main.c.o: CMakeFiles/Image_Segmentation.dir/flags.make
+CMakeFiles/Image_Segmentation.dir/src/main.c.o: ../src/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Image_Segmentation.dir/src/main.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Image_Segmentation.dir/src/main.c.o   -c "/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/main.c"
 
-CMakeFiles/Image_Segmentation.dir/main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Image_Segmentation.dir/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/main.c" > CMakeFiles/Image_Segmentation.dir/main.c.i
+CMakeFiles/Image_Segmentation.dir/src/main.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Image_Segmentation.dir/src/main.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/main.c" > CMakeFiles/Image_Segmentation.dir/src/main.c.i
 
-CMakeFiles/Image_Segmentation.dir/main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Image_Segmentation.dir/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/main.c" -o CMakeFiles/Image_Segmentation.dir/main.c.s
+CMakeFiles/Image_Segmentation.dir/src/main.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Image_Segmentation.dir/src/main.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/main.c" -o CMakeFiles/Image_Segmentation.dir/src/main.c.s
+
+CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.o: CMakeFiles/Image_Segmentation.dir/flags.make
+CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.o: ../src/build_image_matrix.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.o   -c "/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.c"
+
+CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.c" > CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.i
+
+CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.c" -o CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.s
 
 # Object files for target Image_Segmentation
 Image_Segmentation_OBJECTS = \
-"CMakeFiles/Image_Segmentation.dir/main.c.o"
+"CMakeFiles/Image_Segmentation.dir/src/main.c.o" \
+"CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.o"
 
 # External object files for target Image_Segmentation
 Image_Segmentation_EXTERNAL_OBJECTS =
 
-Image_Segmentation: CMakeFiles/Image_Segmentation.dir/main.c.o
-Image_Segmentation: CMakeFiles/Image_Segmentation.dir/build.make
-Image_Segmentation: CMakeFiles/Image_Segmentation.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable Image_Segmentation"
+../BUILD/Image_Segmentation: CMakeFiles/Image_Segmentation.dir/src/main.c.o
+../BUILD/Image_Segmentation: CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.o
+../BUILD/Image_Segmentation: CMakeFiles/Image_Segmentation.dir/build.make
+../BUILD/Image_Segmentation: CMakeFiles/Image_Segmentation.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable ../BUILD/Image_Segmentation"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Image_Segmentation.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/Image_Segmentation.dir/build: Image_Segmentation
+CMakeFiles/Image_Segmentation.dir/build: ../BUILD/Image_Segmentation
 
 .PHONY : CMakeFiles/Image_Segmentation.dir/build
 

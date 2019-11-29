@@ -1,0 +1,1 @@
+/usr/bin/cc  -Wall -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/Image_segmentation_stb.dir/src/main.c.o  -o ../BUILD/Image_segmentation_stb  -L"/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/include" 

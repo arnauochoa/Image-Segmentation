@@ -123,32 +123,59 @@ Image_Segmentation/fast:
 	$(MAKE) -f CMakeFiles/Image_Segmentation.dir/build.make CMakeFiles/Image_Segmentation.dir/build
 .PHONY : Image_Segmentation/fast
 
-main.o: main.c.o
+src/build_image_matrix.o: src/build_image_matrix.c.o
 
-.PHONY : main.o
+.PHONY : src/build_image_matrix.o
 
 # target to build an object file
-main.c.o:
-	$(MAKE) -f CMakeFiles/Image_Segmentation.dir/build.make CMakeFiles/Image_Segmentation.dir/main.c.o
-.PHONY : main.c.o
+src/build_image_matrix.c.o:
+	$(MAKE) -f CMakeFiles/Image_Segmentation.dir/build.make CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.o
+.PHONY : src/build_image_matrix.c.o
 
-main.i: main.c.i
+src/build_image_matrix.i: src/build_image_matrix.c.i
 
-.PHONY : main.i
+.PHONY : src/build_image_matrix.i
 
 # target to preprocess a source file
-main.c.i:
-	$(MAKE) -f CMakeFiles/Image_Segmentation.dir/build.make CMakeFiles/Image_Segmentation.dir/main.c.i
-.PHONY : main.c.i
+src/build_image_matrix.c.i:
+	$(MAKE) -f CMakeFiles/Image_Segmentation.dir/build.make CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.i
+.PHONY : src/build_image_matrix.c.i
 
-main.s: main.c.s
+src/build_image_matrix.s: src/build_image_matrix.c.s
 
-.PHONY : main.s
+.PHONY : src/build_image_matrix.s
 
 # target to generate assembly for a file
-main.c.s:
-	$(MAKE) -f CMakeFiles/Image_Segmentation.dir/build.make CMakeFiles/Image_Segmentation.dir/main.c.s
-.PHONY : main.c.s
+src/build_image_matrix.c.s:
+	$(MAKE) -f CMakeFiles/Image_Segmentation.dir/build.make CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.s
+.PHONY : src/build_image_matrix.c.s
+
+src/main.o: src/main.c.o
+
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.c.o:
+	$(MAKE) -f CMakeFiles/Image_Segmentation.dir/build.make CMakeFiles/Image_Segmentation.dir/src/main.c.o
+.PHONY : src/main.c.o
+
+src/main.i: src/main.c.i
+
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.c.i:
+	$(MAKE) -f CMakeFiles/Image_Segmentation.dir/build.make CMakeFiles/Image_Segmentation.dir/src/main.c.i
+.PHONY : src/main.c.i
+
+src/main.s: src/main.c.s
+
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.c.s:
+	$(MAKE) -f CMakeFiles/Image_Segmentation.dir/build.make CMakeFiles/Image_Segmentation.dir/src/main.c.s
+.PHONY : src/main.c.s
 
 # Help Target
 help:
@@ -159,9 +186,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... Image_Segmentation"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... src/build_image_matrix.o"
+	@echo "... src/build_image_matrix.i"
+	@echo "... src/build_image_matrix.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 .PHONY : help
 
 

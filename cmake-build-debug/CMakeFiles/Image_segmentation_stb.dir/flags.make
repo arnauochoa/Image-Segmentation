@@ -6,5 +6,5 @@ C_FLAGS =  -Wall   -std=gnu99
 
 C_DEFINES = 
 
-C_INCLUDES = 
+C_INCLUDES = -I"/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/include/stb-master" 
 

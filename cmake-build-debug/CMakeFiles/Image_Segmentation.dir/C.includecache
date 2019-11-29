@@ -6,7 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/main.c
+/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.c
+printf.h
+-
+build_image_matrix.h
+/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.h
+
+/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.h
+
+/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/main.c
 stdio.h
 -
+stdlib.h
+-
+build_image_matrix.h
+/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.h
 

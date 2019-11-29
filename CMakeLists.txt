@@ -3,4 +3,14 @@ project(Image_Segmentation C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Image_Segmentation main.c)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/BUILD")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/BUILD")
+
+set(C_SOURCE_FILES
+        src/main.c
+        src/build_image_matrix.c
+        src/build_image_matrix.h)
+
+add_executable(${PROJECT_NAME} ${C_SOURCE_FILES})
