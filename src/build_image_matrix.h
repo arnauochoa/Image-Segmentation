@@ -7,6 +7,4 @@
 
 #endif //IMAGE_SEGMENTATION_READIMAGE_H
 
-void helloWorld();
-
-int **readImage(char *path);
+int **buildImageMatrix(char *path);
