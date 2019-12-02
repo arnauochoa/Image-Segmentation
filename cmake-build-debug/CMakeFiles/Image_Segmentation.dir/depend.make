@@ -6,4 +6,6 @@ CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.o: ../src/build_image
 
 CMakeFiles/Image_Segmentation.dir/src/main.c.o: ../src/build_image_matrix.h
 CMakeFiles/Image_Segmentation.dir/src/main.c.o: ../src/main.c
+CMakeFiles/Image_Segmentation.dir/src/main.c.o: ../src/stb-master/stb_image.h
+CMakeFiles/Image_Segmentation.dir/src/main.c.o: ../src/stb-master/stb_image_write.h
 

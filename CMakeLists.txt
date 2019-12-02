@@ -11,6 +11,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/BUILD")
 set(C_SOURCE_FILES
         src/main.c
         src/build_image_matrix.c
-        src/build_image_matrix.h)
+        src/build_image_matrix.h
+        src/stb-master/stb_image.h
+        src/stb-master/stb_image_write.h
+        )
 
 add_executable(${PROJECT_NAME} ${C_SOURCE_FILES})

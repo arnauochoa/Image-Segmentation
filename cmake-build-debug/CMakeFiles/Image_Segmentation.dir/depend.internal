@@ -7,3 +7,5 @@ CMakeFiles/Image_Segmentation.dir/src/build_image_matrix.c.o
 CMakeFiles/Image_Segmentation.dir/src/main.c.o
  /Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.h
  /Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/main.c
+ /Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/stb-master/stb_image.h
+ /Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/stb-master/stb_image_write.h

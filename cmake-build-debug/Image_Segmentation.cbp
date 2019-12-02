@@ -87,6 +87,12 @@
 		<Unit filename="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/main.c">
 			<Option target="Image_Segmentation"/>
 		</Unit>
+		<Unit filename="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/stb-master/stb_image.h">
+			<Option target="Image_Segmentation"/>
+		</Unit>
+		<Unit filename="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/stb-master/stb_image_write.h">
+			<Option target="Image_Segmentation"/>
+		</Unit>
 		<Unit filename="/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

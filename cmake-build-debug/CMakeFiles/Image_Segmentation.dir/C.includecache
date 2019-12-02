@@ -6,12 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.c
-printf.h
--
-build_image_matrix.h
-/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.h
-
 /Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.h
 
 /Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/main.c
@@ -21,4 +15,56 @@ stdlib.h
 -
 build_image_matrix.h
 /Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/build_image_matrix.h
+stb-master/stb_image_write.h
+/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/stb-master/stb_image_write.h
+stb-master/stb_image.h
+/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/stb-master/stb_image.h
+
+/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/stb-master/stb_image.h
+stb_image.h
+/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/stb-master/stb_image.h
+stdio.h
+-
+stdlib.h
+-
+stdarg.h
+-
+stddef.h
+-
+stdlib.h
+-
+string.h
+-
+limits.h
+-
+math.h
+-
+stdio.h
+-
+assert.h
+-
+stdint.h
+-
+emmintrin.h
+-
+intrin.h
+-
+arm_neon.h
+-
+
+/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/Image-Segmentation/src/stb-master/stb_image_write.h
+stdlib.h
+-
+stdio.h
+-
+stdarg.h
+-
+stdlib.h
+-
+string.h
+-
+math.h
+-
+assert.h
+-
 
