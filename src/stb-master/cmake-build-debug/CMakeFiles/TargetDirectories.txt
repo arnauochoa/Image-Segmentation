@@ -1,3 +1,0 @@
-/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/stb-master/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/stb-master/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/stb-master/cmake-build-debug/CMakeFiles/stb_image_lib.dir

@@ -9,5 +9,6 @@ int main() {
     char *path = "../resources/testBW.png";
     buildImageMatrix(path);
 
+
     return EXIT_SUCCESS;
 }
