@@ -7,7 +7,8 @@
 
 int main() {
     char *path = "../resources/testBW.png";
-    buildImageMatrix(path);
+
+    Image image = buildImage(path);
 
 
     return EXIT_SUCCESS;

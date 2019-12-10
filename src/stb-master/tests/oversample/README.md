@@ -11,7 +11,7 @@ Oversampling is a mechanism for improving subpixel rendering of characters.
 
 Improving subpixel has a few benefits:
 
-* With horizontal-oversampling, text can remain sharper while still being sub-pixel positioned for better kerning
+* With horizontal-oversampling, text can remain sharper while still being sub-pixels positioned for better kerning
 * Horizontally-oversampled text significantly reduces aliasing when text animates horizontally
 * Vertically-oversampled text significantly reduces aliasing when text animates vertically
 * Text oversampled in both directions significantly reduces aliasing when text rotates
@@ -30,7 +30,7 @@ if you re-render the vector data.
 However, if you simply cache a single version of the bitmap and
 draw it at different subpixel positions with a GPU, you will get
 either the exact same result (if you use point-sampling on the
-texture) or linear filtering. Linear filtering will cause a sub-pixel
+texture) or linear filtering. Linear filtering will cause a sub-pixels
 positioned bitmap to blur further, causing a visible de-sharpening
 of the character. (And, since the character wasn't hinted, it was
 already blurrier than a hinted one would be, and now it gets even
@@ -38,7 +38,7 @@ more blurry.)
 
 You can avoid this by caching multiple variants of a character which
 were rendered independently from the vector data. For example, you
-might cache 3 versions of a char, at 0, 1/3, and 2/3rds of a pixel
+might cache 3 versions of a char, at 0, 1/3, and 2/3rds of a pixels
 horizontal offset, and always require characters to fall on integer
 positions vertically.
 

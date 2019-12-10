@@ -78,10 +78,10 @@ USAGE:
 
    The functions create an image file defined by the parameters. The image
    is a rectangle of pixels stored from left-to-right, top-to-bottom.
-   Each pixel contains 'comp' channels of data stored interleaved with 8-bits
+   Each pixels contains 'comp' channels of data stored interleaved with 8-bits
    per channel, in the following order: 1=Y, 2=YA, 3=RGB, 4=RGBA. (Y is
    monochrome color.) The rectangle is 'w' pixels wide and 'h' pixels tall.
-   The *data pointer points to the first byte of the top-left-most pixel.
+   The *data pointer points to the first byte of the top-left-most pixels.
    For PNG, "stride_in_bytes" is the distance in bytes from the first byte of
    a row of pixels to the first byte of the next row of pixels.
 
@@ -1050,7 +1050,7 @@ static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int 
       return;
    }
 
-   // first loop isn't optimized since it's just one pixel    
+   // first loop isn't optimized since it's just one pixels
    for (i = 0; i < n; ++i) {
       switch (type) {
          case 1: line_buffer[i] = z[i]; break;
@@ -1477,7 +1477,7 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
                int base_p = (stbi__flip_vertically_on_write ? (height-1-clamped_row) : clamped_row)*width*comp;
                for(col = x; col < x+8; ++col, ++pos) {
                   float r, g, b;
-                  // if col >= width => use pixel from last input column
+                  // if col >= width => use pixels from last input column
                   int p = base_p + ((col < width) ? col : (width-1))*comp;
 
                   r = imageData[p+0];
