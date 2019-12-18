@@ -1,6 +1,0 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/stb-master"
--- Configuring done
-CMake Error: Cannot determine link language for target "stb_image_lib".
-CMake Error: CMake can not determine linker language for target: stb_image_lib
--- Generating done
--- Build files have been written to: /Users/arnauochoa/Documents/Estudis/MSc/Semester 1/C_prog/stb-master/cmake-build-debug
