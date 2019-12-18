@@ -15,3 +15,9 @@ int *getPixel(Image img, int h, int w){
     pixel[2] = img.pixels[w * img.width + h + 2];
     return pixel;
 }
+
+void fillPixel(Image image, int h, int w, int pixel[3]){
+    image.pixels[w*image.width + h] = pixel[0];
+    image.pixels[w*image.width + h + 1] = pixel[1];
+    image.pixels[w*image.width + h + 2] = pixel[2];
+}

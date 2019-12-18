@@ -14,5 +14,6 @@ typedef struct {
 } Image;
 
 int *getPixel(Image img, int h, int w);
+void fillPixel(Image image, int h, int w, int pixel[3]);
 
 #endif //IMAGE_SEGMENTATION_IMAGE_H
