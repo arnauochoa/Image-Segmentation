@@ -17,10 +17,6 @@ Image buildImage(char *path) {
     Image image;
     int channels;
     int *img = (int *) stbi_load(path, &image.width, &image.height, &channels, NUM_CHANNELS);
-                                //file path, width and height of the image, the number of color channels
-                                // if R,G,B -> channels = 3 (ignoring transparency)
-                                // if R,G,B,alpha -> 4 channels
-                                // last parameter = 0, then we are loading the image as it is (with 4 channels)
 
     if (img == NULL) {
         printf("Error in loading the image\n");
@@ -33,23 +29,21 @@ Image buildImage(char *path) {
         exit(1);
     }
 
-//    image.pixels = (int *) malloc(image.width * image.height * 4 * sizeof(int));
+    size_t imageSize = image.width * image.height * NUM_CHANNELS;
+
+    image.pixels = (uint8_t *) malloc(imageSize);
 
     int *p = img;
     for (int i = 0; i < image.height; i++) {
         for (int j = 0; j < image.width; j++) {
-            int pixel[3] = {};
-//            fillPixel(image, i, j, p);
-//            int *pixel = getPixel(image, i, j);
-//            int pixel[] = {1, 1, 1};
-//            printf("(%d %d %d)\t", pixel[0], pixel[1], pixel[2]);
-//            printf("(%d %d %d)\t", *(p+(i*image.width)), *(p+(i*image.width+1)), *(p+(i*image.width+2)));
-            printf("(%d %d %d)\t", *(p+i*image.width+j*3), *(p+i*image.width+j*3+1), *(p+i*image.width+j*3+2));
+            fillPixel(image, i, j, p);
+            uint8_t *pix = getPixel(image, i, j);
+
+            printf("(%d %d %d)\t\t", pix[0], pix[1], pix[2]); // Print for checking
             p++;
         }
         printf("\n");
     }
 
-//    stbi_image_free(img);
     return image;
 }

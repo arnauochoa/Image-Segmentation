@@ -5,15 +5,17 @@
 #ifndef IMAGE_SEGMENTATION_IMAGE_H
 #define IMAGE_SEGMENTATION_IMAGE_H
 
+#include <cxxabi.h>
+
 extern const int NUM_CHANNELS;
 
 typedef struct {
     int height;
     int width;
-    int *pixels;
+    uint8_t *pixels;
 } Image;
 
-int *getPixel(Image img, int h, int w);
-void fillPixel(Image image, int h, int w, int pixel[3]);
+uint8_t *getPixel(Image img, int h, int w);
+void fillPixel(Image image, int h, int w, int *p);
 
 #endif //IMAGE_SEGMENTATION_IMAGE_H
