@@ -14,7 +14,7 @@ set(C_SOURCE_FILES
         src/build_image_matrix.h
         src/stb-master/stb_image.h
         src/stb-master/stb_image_write.h
-        src/image.c src/image.h)
+        src/image.c src/image.h src/write_image_matrix.c src/write_image_matrix.h)
 
 add_executable(${PROJECT_NAME} ${C_SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} m)
