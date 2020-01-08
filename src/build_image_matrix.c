@@ -17,10 +17,6 @@ Image buildImage(char *path) {
     Image image;
     int channels;
     int *img = (int *) stbi_load(path, &image.width, &image.height, &channels, NUM_CHANNELS);
-                                //file path, width and height of the image, the number of color channels
-                                // if R,G,B -> channels = 3 (ignoring transparency)
-                                // if R,G,B,alpha -> 4 channels
-                                // last parameter = 0, then we are loading the image as it is (with 4 channels)
 
     if (img == NULL) {
         printf("Error in loading the image\n");
@@ -33,7 +29,8 @@ Image buildImage(char *path) {
         exit(1);
     }
 
-    size_t imageSize = (size_t) (image.width * image.height * NUM_CHANNELS);
+    size_t imageSize = image.width * image.height * NUM_CHANNELS;
+
     image.pixels = (uint8_t *) malloc(imageSize);
 
     int *p = img;
@@ -48,6 +45,5 @@ Image buildImage(char *path) {
         printf("\n");
     }
 
-//    stbi_image_free(img);
     return image;
 }
