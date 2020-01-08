@@ -9,7 +9,8 @@
 
 int writeImage(Image img) {
     int size = img.width * NUM_CHANNELS;
-    stbi_write_png("output_image.png", img.width, img.height, NUM_CHANNELS, img.pixels, size);
+
+    stbi_write_png("../results/output_image.png", img.width, img.height, NUM_CHANNELS, img.pixels, size);
 
     return 0;
 }
