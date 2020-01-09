@@ -28,7 +28,7 @@ void checkDesignParameters(DesignParameters designParameters){
 
 DesignParameters getDesignParameters(){
     DesignParameters designParameters;
-    designParameters.initialNClusters = 5;
+    designParameters.initialNClusters = 3;
     designParameters.crossoverRate = 0.9;
     designParameters.mutationRate = 0.02;
     designParameters.a = 0.7;
