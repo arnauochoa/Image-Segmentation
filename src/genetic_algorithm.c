@@ -9,9 +9,8 @@
 #include "image.h"
 #include "stack.h"
 
-#define new_max(x, y) ((x) >= (y)) ? (x) : (y)
-
 // Macros
+#define new_max(x, y) ((x) >= (y)) ? (x) : (y)
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 
 // Global variables
