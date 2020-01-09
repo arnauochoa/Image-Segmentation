@@ -6,6 +6,7 @@
 #include "genetic_algorithm.h"
 #include <stdint.h>
 #include <sys/time.h>
+#include <float.h>
 
 
 Image segmentateImage(Image image);
@@ -51,7 +52,7 @@ Image segmentateImage(Image image) {
     DesignParameters designParameters; // TODO: initialize
 
     int *population = initializePopulation(image, designParameters);
-
+    
 //    int hasConverged = 0;
 //    int newVariance;
 //    int oldVariance = INT32_MAX;
@@ -64,5 +65,6 @@ Image segmentateImage(Image image) {
 //
 //
 //    return image;
+
 
 }
