@@ -26,12 +26,7 @@ void checkDesignParameters(DesignParameters designParameters){
     EXIT_FAILURE;
 }
 
-int main() {
-    srand(time(NULL));
-    char *path = "../resources/testBW_small.png";
-
-    // get design parameters from console and check values (percentages and a, b)
-
+DesignParameters getDesignParameters(){
     DesignParameters designParameters;
     designParameters.initialNClusters = 5;
     designParameters.crossoverRate = 0.9;
@@ -41,53 +36,46 @@ int main() {
 
     checkDesignParameters(designParameters);
 
+    return designParameters;
+}
 
-//    Image image = buildImage(path);
-//
-//    Image segImage = segmentateImage(image);
-//
-//    writeImage(segImage);
+int main() {
+    srand(time(NULL));
 
-    test();
+    char *path = "../resources/testBW_small.png";
 
-//    Image grayImage = convertImageToGrayScale(image);
-//
-//    DesignParameters designParameters;
-//    designParameters.initialNClusters = 5;
-//    designParameters.crossoverRate = 0.9;
-//    designParameters.mutationRate = 0.02;
-//    designParameters.a = 0.7;
-//    designParameters.b = 0.3;
-//
-//    int *population = initializePopulation(grayImage, designParameters);
+    Image image = buildImage(path);
 
-    //Image segImage = segmentateImage(image);
+    Image grayImage = convertImageToGrayScale(image);
 
+    Image segImage = segmentateImage(grayImage);
 
-//    Image segImage = segmentateImage(grayImage);
-
-//    writeImage(grayImage);
+    writeImage(segImage);
 
     return EXIT_SUCCESS;
 }
 
-//Image segmentateImage(Image image) {
-//    DesignParameters designParameters; // TODO: initialize
-//
-//    int *population = initializePopulation(image, designParameters);
-//
-//    int hasConverged = 0;
-//    int newVariance;
-//    int oldVariance = INT32_MAX;
-//
-//    while (!hasConverged) {
-//        population = evolvePopulation(population, designParameters);
-//        hasConverged = testConvergence(image, population, designParameters, oldVariance, &newVariance);
-//        oldVariance = newVariance;
-//    }
-//
-//
-//    return image;
-//
-//
-//}
+Image segmentateImage(Image image) {
+    // get design parameters from console and check values (percentages and a, b)
+    DesignParameters designParameters = getDesignParameters();
+
+    int *population = initializePopulation(image, designParameters);
+
+    int hasConverged = 0;
+    float newVariance;
+    float oldVariance = FLT_MAX;
+
+    while (!hasConverged) {
+        population = evolvePopulation(image, population, designParameters);
+//        for (int i = 0; i < image.width * image.height; ++i) {
+//            printf("\n pix %d --> chromosome: %d", i, population[i]);
+//        }
+        printf("\n --->> HELLO <<--- \n");
+        hasConverged = testConvergence(image, population, oldVariance, &newVariance);
+        oldVariance = newVariance;
+    }
+
+    printf("has converged: %d", hasConverged);
+
+    return image;
+}

@@ -80,10 +80,9 @@ Image convertImageToGrayScale(Image image) {
  * @return
  */
 int *getPixelPosition(Image image, int i) {
+    int *pixelPosition = malloc(2 * sizeof(int));
+    pixelPosition[0] = i / image.width;
+    pixelPosition[1] = i % image.width;
 
-    int *pixelPosition[2];
-    *pixelPosition[0] = i / image.width;
-    *pixelPosition[1] = i % image.width;
-
-    return *pixelPosition;
+    return pixelPosition;
 }
