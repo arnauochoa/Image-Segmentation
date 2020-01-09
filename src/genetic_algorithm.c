@@ -36,8 +36,12 @@ int *getClusterIntensities(Image image, int *pixelIndices, int size);
 
 float computeSimilarityFunction(Image image, int pixel, int meanGrayValueCluster, DesignParameters designParameters);
 
-// Public functions
 void obtainClusterGrayValues(Image image, int *population);
+
+// Public functions
+Clusters getCluster(){
+    return clusters;
+}
 
 /**
  * This function returns the initial population of chromosomes P(0).
@@ -53,11 +57,11 @@ int *initializePopulation(Image image, DesignParameters designParameters) {
     int imageSize = image.width * image.height;
     //printf("size: %d \n", imageSize);
     clusters.nClusters = designParameters.initialNClusters;
-    clusters.clusterIds = (int *) malloc(designParameters.initialNClusters);
+    clusters.clusterIds = (int *) malloc(clusters.nClusters * sizeof(int));
 
     for (int lambda = 0; lambda < clusters.nClusters; lambda++) {
         clusters.clusterIds[lambda] = (int) ((pow(2, 8) - 1) / clusters.nClusters) * lambda;
-        //printf("Label: %d \n",clusters.clusterIds[lambda]);
+        printf(" -> New label: %d \n",clusters.clusterIds[lambda]);
     }
 
 //    for (int i = 0; i < clusters.nClusters; ++i) {
@@ -66,9 +70,15 @@ int *initializePopulation(Image image, DesignParameters designParameters) {
 
     // Randomly assign clusters to pixels --> Create P(0): population of chromosomes: set of chromosomes (alpha) size: n*m (width*height)
     int *population = (int *) malloc(imageSize);
-
-    for (int currentChromosome = 0; currentChromosome < imageSize; currentChromosome++) {
-        population[currentChromosome] = clusters.clusterIds[getRandomNumber(0, clusters.nClusters - 1)];
+    int currentChromosome = 0;
+    //for (int currentChromosome = 0; currentChromosome < imageSize; currentChromosome++) {
+    while(currentChromosome < imageSize){
+        for (int currentId = 0; currentId < clusters.nClusters; currentId++) {
+            //population[currentChromosome] = clusters.clusterIds[getRandomNumber(0, clusters.nClusters - 1)];
+            population[currentChromosome] = clusters.clusterIds[currentId];
+            printf("Population: %d \n", population[currentChromosome]);
+            currentChromosome++;
+        }
     }
 
     obtainClusterGrayValues(image, population);
@@ -109,7 +119,7 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
     getRandomIndices(numMutate, numPixels, &numMutate);
 
     // Aux array of new clusters
-    Stack *newClusterIndices = createStack(numMutate);
+//    Stack *newClusterIndices = createStack(numMutate);
 
     // Mutate each selected chromosome
     for (int i = 0; i < numMutate; i++) {
@@ -378,6 +388,10 @@ void obtainClusterGrayValues(Image image, int *population) {
     for (int clust = 0; clust < clusters.nClusters; ++clust) {
         int *pixelsInCluster = findPixelsInCluster(population, clusters.clusterIds[clust], imageSize, &clusterSize);
         int *grayscalesInCluster = getClusterIntensities(image, pixelsInCluster, clusterSize);
+        printf("\n ---> Cluster = %d ,(label = %d)", clust, clusters.clusterIds[clust]);
+        for (int j = 0; j < clusterSize; ++j) {
+            printf("   \n pixel %d (pos = %d) ---> %d", j, pixelsInCluster[j], grayscalesInCluster[j]);
+        }
         int sum = 0;
         for (int i = 0; i < clusterSize; ++i) {
             sum += grayscalesInCluster[i];

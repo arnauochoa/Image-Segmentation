@@ -14,7 +14,9 @@ typedef struct {
 
 uint8_t *getPixel(Image image, int h, int w);
 
-void fillPixel(Image image, int h, int w, uint8_t *p);
+void fillPixelFromArray(Image image, int h, int w, uint8_t *arr);
+
+Image fillPixel(Image image, int h, int w, uint8_t *pix);
 
 Image convertImageToGrayScale(Image image);
 

@@ -21,9 +21,10 @@ typedef struct {
     int *clusterGrayValues;
 } Clusters;
 
-
+Clusters getCluster();
 int *initializePopulation(Image image, DesignParameters designParameters);
 int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designParameters);
 int testConvergence(Image image, int *population, float oldVariance, float *newVariance);
+int findIndex(int value, int *array, int size);
 
 void test();
