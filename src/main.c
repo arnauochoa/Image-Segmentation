@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <sys/time.h>
 #include <float.h>
-
+#include <time.h>
 
 Image segmentateImage(Image image);
 
