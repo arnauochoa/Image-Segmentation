@@ -11,11 +11,36 @@
 
 Image segmentateImage(Image image);
 
+void checkDesignParameters(DesignParameters designParameters){
+
+    if(designParameters.crossoverRate < 0 || designParameters.crossoverRate > 1){
+        printf(" << ========================  ERROR  ========================");
+    }
+    if(designParameters.mutationRate < 0 || designParameters.mutationRate > 1){
+        printf(" << ========================  ERROR  ========================");
+    }
+    if(designParameters.a < 0 || designParameters.b < 0 || (designParameters.a + designParameters.b != 1)){
+        printf(" << ========================  ERROR  ========================");
+    }
+
+    EXIT_FAILURE;
+}
+
 int main() {
     srand(time(NULL));
     char *path = "../resources/testBW_small.png";
 
     // get design parameters from console and check values (percentages and a, b)
+
+    DesignParameters designParameters;
+    designParameters.initialNClusters = 5;
+    designParameters.crossoverRate = 0.9;
+    designParameters.mutationRate = 0.02;
+    designParameters.a = 0.7;
+    designParameters.b = 0.3;
+
+    checkDesignParameters(designParameters);
+
 
 //    Image image = buildImage(path);
 //

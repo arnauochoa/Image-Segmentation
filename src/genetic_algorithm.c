@@ -17,6 +17,7 @@
 Clusters clusters;
 
 // Function declarations
+
 int mutateChromosome(int chromosome);
 
 int getRandomNumber(int min, int max);
@@ -38,7 +39,12 @@ float
 computeSimilarityFunction(Image image, int *population, int pixel1, int pixel2, DesignParameters designParameters);
 
 // Public functions
-
+/**
+ * This function returns the initial population of chromosomes P(0).
+ * @param image Image structure
+ * @param designParameters DesignParameters structure
+ * @return Int array with the cluster ID which each pixel of the image belongs to.
+ */
 int *initializePopulation(Image image, DesignParameters designParameters) {
     // Define Clusters structure --> Compute S and L
 
@@ -70,7 +76,13 @@ int *initializePopulation(Image image, DesignParameters designParameters) {
     // Return P(0)
     return population;
 }
-
+/**
+ * This function returns the new population of chromosomes P(t+1).
+ * @param image Image structure
+ * @param oldPopulation Int array of chromosomes
+ * @param designParameters DesignParameters structure
+ * @return Int array with the cluster ID which each pixel of the image belongs to.
+ */
 int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designParameters) {
 
     int numPixels = image.height * image.width;
@@ -123,7 +135,14 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
     // Return newPopulation P(t+1)
     return newPopulation;
 }
-
+/**
+ * This function returns 1 if the GA has converged or 0 otherwise, and updates the old variance
+ * @param image Image structure
+ * @param population Int array of chromosomes
+ * @param oldVariance float value
+ * @param newVariance float value
+ * @return Int value (1 or 0)
+ */
 int testConvergence(Image image, int *population, float oldVariance, float *newVariance) {
 
     int imageSize = image.height * image.width;
@@ -146,6 +165,14 @@ int testConvergence(Image image, int *population, float oldVariance, float *newV
     return hasConverged;
 }
 
+/**
+ * This function returns the array of pixels contained in a cluster
+ * @param population Int array
+ * @param clusterId Int value
+ * @param imageSize Int value
+ * @param clusterSize Int array
+ * @return Int array of the pixels indices wrt the image
+ */
 int *findPixelsInCluster(int *population, int clusterId, int imageSize, int *clusterSize) {
 
     int size = 0;
@@ -349,6 +376,7 @@ void updateClusterMeanGrayValue(Clusters cluster, int *population, Image image){
 
 
 }
+
 void test() {
 //    for (int i = 0; i < 10; i++) {
 //        printf("\n n = %i", getRandomNumber(0, 8));
