@@ -16,7 +16,7 @@ typedef struct {
 
 // function to create a stack of given capacity. It initializes size of
 // stack as 0
-Stack *createStack(unsigned capacity)
+Stack *createStack(unsigned capacity);
 // Stack is full when top is equal to the last index
 int isFull(Stack* stack);
 // Stack is empty when top is equal to -1
