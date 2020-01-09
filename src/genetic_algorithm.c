@@ -32,7 +32,7 @@ int *findPixelsInCluster(int *population, int clusterId, int imageSize, int *clu
 
 float variance(int *array, int size);
 
-int *getPixelIntensity(Image image, int *pixelIndices);
+int *getClusterIntensities(Image image, int *pixelIndices, int size);
 
 float
 computeSimilarityFunction(Image image, int *population, int pixel1, int pixel2, DesignParameters designParameters);
@@ -131,7 +131,7 @@ testConvergence(Image image, int *population, float oldVariance, float *newVaria
     for (int i = 0; i < clusters.nClusters; i++) {
         int clusterSize;
         int *clusterPixels = findPixelsInCluster(population, clusters.clusterIds[i], imageSize, &clusterSize);
-        int *clusterIntensities = getPixelIntensity(image, clusterPixels);
+        int *clusterIntensities = getClusterIntensities(image, clusterPixels, clusterSize);
         varSum += variance(clusterIntensities, clusterSize);
     }
 
@@ -187,9 +187,12 @@ float variance(int *array, int size) {
     return varSum / (float) size;
 }
 
-int *getPixelIntensity(Image image, int *pixelIndices) {
-    //TODO: compute grayscale of given pixel
-    return NULL;
+int *getClusterIntensities(Image image, int *pixelIndices, int size) {
+    int clusterIntensities[size];
+    for (int i = 0; i < size; ++i) {
+        clusterIntensities[i] = image.pixels[pixelIndices[i] * NUM_CHANNELS];
+    }
+    return clusterIntensities;
 }
 
 // Private functions
