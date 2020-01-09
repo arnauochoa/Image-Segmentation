@@ -21,7 +21,7 @@ int mutateChromosome(int chromosome);
 
 int getRandomNumber(int min, int max);
 
-int *getRandomIndices(int numIndices, int numPixels);
+int *getRandomIndices(int numIndices, int numPixels, int *indices);
 
 int isValueInArray(int value, int *array, int size);
 
@@ -63,7 +63,7 @@ int *initializePopulation(Image image, DesignParameters designParameters) {
     int *population = (int *) malloc(imageSize);
 
     for (int currentChromosome = 0; currentChromosome < imageSize; currentChromosome++) {
-        population[currentChromosome] = clusters.clusterIds[getRandomNumber(0, clusters.nClusters-1)];
+        population[currentChromosome] = clusters.clusterIds[getRandomNumber(0, clusters.nClusters - 1)];
 //        printf("\n Population: %d", population[currentChromosome]);
 //        if(!isValueInArray(population[currentChromosome], clusters.clusterIds, clusters.nClusters)) printf(" <<--- ERROR ------");
     }
@@ -77,10 +77,11 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
     int evolvedPopulation[numPixels];
 
     // Check if num of selected chromosome is even
-    int numCrossover = designParameters.crossoverRate * numPixels;
+    int numCrossover = (int) designParameters.crossoverRate * numPixels;
 
-    // Randomly select numCrossover of chromosomes of oldPopulation
-    int *crossIndices = getRandomIndices(numCrossover, numPixels);
+    // Randomly select numCrossover of chromosomes of population
+    int crossIndices[numCrossover];
+    getRandomIndices(numCrossover, numPixels, &crossIndices);
     int *firstHalf = crossIndices;
     int *secondHalf = crossIndices + (numCrossover / 2);
 
@@ -91,8 +92,9 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
     }
 
     // Mutate
-    int numMutate = designParameters.mutationRate * numPixels;
-    int *mutIndices = getRandomIndices(numMutate, numPixels);
+    int numMutate = (int) designParameters.mutationRate * numPixels;
+    int mutIndices[numMutate];
+    getRandomIndices(numMutate, numPixels, &numMutate);
 
     // Aux array of new clusters
     Clusters auxClusters = {.nClusters = 0, .clusterIds = malloc(numMutate * sizeof(int))};
@@ -122,8 +124,7 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
     return newPopulation;
 }
 
-int
-testConvergence(Image image, int *population, float oldVariance, float *newVariance) {
+int testConvergence(Image image, int *population, float oldVariance, float *newVariance) {
 
     int imageSize = image.height * image.width;
     int hasConverged = 0;
@@ -214,8 +215,7 @@ int getRandomNumber(int min, int max) {
  * The Knuth algorithm --> Complexity O(N), N=numPixels. Sorted result.
  * https://stackoverflow.com/questions/1608181/unique-random-numbers-in-an-integer-array-in-the-c-programming-language
  */
-int *getRandomIndices(int numIndices, int numPixels) {
-    int indices[numIndices];
+int *getRandomIndices(int numIndices, int numPixels, int *indices) {
     int in, im;
 
     im = 0;
@@ -227,7 +227,6 @@ int *getRandomIndices(int numIndices, int numPixels) {
             /* Take it */
             indices[im++] = in;
     }
-
     assert(im == numIndices);
 
     return indices;
@@ -378,6 +377,26 @@ void test() {
 //    float a = 3.3;
 //    float b = 3.11;
 //    printf("\n min = %f", min(a,b));
+
+//    for (int i = 0; i < 10; i++) {
+//        printf("\n ind %d --> %d", i, getRandomNumber(1, 20));
+//    }
+
+    int indices[10];
+    getRandomIndices(10, 100, &indices);
+    Stack *stack = createStack(15);
+    for (int i = 0; i < 10; i++) {
+        printf("\n push %d --> %d", i, indices[i]);
+        push(stack, indices[i]);
+    }
+    printf("\n==========================================================");
+    printf("\n peek 1 --> %d", peek(stack));
+    printf("\n peek 1 --> %d", peek(stack));
+    printf("\n peek 1 --> %d", peek(stack));
+    printf("\n==========================================================");
+    for (int i = 0; i < 10; i++) {
+        printf("\n pop %d --> %d", i, pop(stack));
+    }
 
 
 }

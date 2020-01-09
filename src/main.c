@@ -17,31 +17,31 @@ int main() {
 
     // get design parameters from console and check values (percentages and a, b)
 
-    Image image = buildImage(path);
+//    Image image = buildImage(path);
 //
 //    Image segImage = segmentateImage(image);
 //
 //    writeImage(segImage);
 
-//    test();
+    test();
 
-    Image grayImage = convertImageToGrayScale(image);
-
-    DesignParameters designParameters;
-    designParameters.initialNClusters = 5;
-    designParameters.crossoverRate = 0.9;
-    designParameters.mutationRate = 0.02;
-    designParameters.a = 0.7;
-    designParameters.b = 0.3;
-
-    int *population = initializePopulation(grayImage, designParameters);
+//    Image grayImage = convertImageToGrayScale(image);
+//
+//    DesignParameters designParameters;
+//    designParameters.initialNClusters = 5;
+//    designParameters.crossoverRate = 0.9;
+//    designParameters.mutationRate = 0.02;
+//    designParameters.a = 0.7;
+//    designParameters.b = 0.3;
+//
+//    int *population = initializePopulation(grayImage, designParameters);
 
     //Image segImage = segmentateImage(image);
 
 
 //    Image segImage = segmentateImage(grayImage);
 
-    writeImage(grayImage);
+//    writeImage(grayImage);
 
     return EXIT_SUCCESS;
 }
