@@ -24,7 +24,7 @@ int getRandomNumber(int min, int max);
 
 int *getRandomIndices(int numIndices, int numPixels);
 
-int isValueInArray(int value, int *array);
+int isValueInArray(int value, int *array, int size);
 
 int *selectionProcess(Image image, int *oldPopulation, int *evolvedPopulation, Clusters clusters,
                       DesignParameters designParameters, Stack *newClusterIds);
@@ -51,27 +51,23 @@ int *initializePopulation(Image image, DesignParameters designParameters) {
     clusters.clusterIds = (int *) malloc(designParameters.initialNClusters);
 
     for (int lambda = 0; lambda < clusters.nClusters; lambda++) {
-        clusters.clusterIds[lambda] = (int) (pow(2, 8) - 1) / clusters.nClusters * lambda;
+        clusters.clusterIds[lambda] = (int) ((pow(2, 8) - 1) / clusters.nClusters) * lambda;
         //printf("Label: %d \n",clusters.clusterIds[lambda]);
+    }
+
+    printf("\n>> Clusters ");
+    for (int i = 0; i < clusters.nClusters; ++i) {
+        printf("%d, ", clusters.clusterIds[i]);
     }
 
     // Randomly assign clusters to pixels --> Create P(0): population of chromosomes: set of chromosomes (alpha) size: n*m (width*height)
     int *population = (int *) malloc(imageSize);
-    int currentChromosome = 0;
-    int currentCluster = 0;
-    while (currentChromosome < imageSize && currentCluster < clusters.nClusters) {
-        population[currentChromosome] = clusters.clusterIds[currentCluster];
-        //printf("Population: %d \n", population[currentChromosome]);
-        //printf("contador: %d \n", currentChromosome);
-        currentCluster++;
-        currentChromosome++;
 
-        if (currentCluster == clusters.nClusters) {
-            currentCluster = 0;
-        }
+    for (int currentChromosome = 0; currentChromosome < imageSize; currentChromosome++) {
+        population[currentChromosome] = clusters.clusterIds[getRandomNumber(0, clusters.nClusters-1)];
+//        printf("\n Population: %d", population[currentChromosome]);
+//        if(!isValueInArray(population[currentChromosome], clusters.clusterIds, clusters.nClusters)) printf(" <<--- ERROR ------");
     }
-
-
     // Return P(0)
     return population;
 }
@@ -110,8 +106,8 @@ int *evolvePopulation(Image image, int *population, DesignParameters designParam
         population[mutIndices[i]] = newChromosome;
 
         //If chromosome is new Label add it to aux array
-        if (!isValueInArray(newChromosome, auxClusters.clusterIds) &&
-            !isValueInArray(newChromosome, clusters.clusterIds)) {
+        if (!isValueInArray(newChromosome, auxClusters.clusterIds, auxClusters.nClusters) &&
+            !isValueInArray(newChromosome, clusters.clusterIds, clusters.nClusters)) {
             auxClusters.clusterIds[auxClusters.nClusters] = newChromosome;
             auxClusters.nClusters++;
 
@@ -233,8 +229,8 @@ int *getRandomIndices(int numIndices, int numPixels) {
     return indices;
 }
 
-int isValueInArray(int value, int *array) {
-    for (int i = 0; i < sizeof(array) / sizeof(array[0]); i++) {
+int isValueInArray(int value, int *array, int size) {
+    for (int i = 0; i < size; i++) {
         if (array[i] == value)
             return 1;
     }
@@ -329,4 +325,6 @@ void test() {
 //    float a = 3.3;
 //    float b = 3.11;
 //    printf("\n min = %f", min(a,b));
+
+
 }
