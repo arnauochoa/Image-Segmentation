@@ -193,6 +193,7 @@ float variance(int *array, int size) {
 }
 
 int *getPixelIntensity(Image image, int *pixelIndices) {
+    //TODO: compute grayscale of given pixel
     return NULL;
 }
 
