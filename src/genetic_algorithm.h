@@ -23,3 +23,5 @@ typedef struct {
 int *initializePopulation(Image image, DesignParameters designParameters);
 int *evolvePopulation(int *population, DesignParameters designParameters);
 int testConvergence(Image image, int *population, DesignParameters designParameters, int oldVariance, int *newVariance);
+
+void test();

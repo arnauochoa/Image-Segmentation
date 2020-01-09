@@ -1,13 +1,24 @@
 
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
 #include "genetic_algorithm.h"
 #include "image.h"
 
+// Global variables
+Clusters clusters;
+
+// Function declarations
 int mutateChromosome(int chromosome);
+
+int getRandomNumber(int min, int max);
 
 int *selectionProcess(int *oldPopulation, int *evolvedPopulation, Clusters clusters, DesignParameters designParameters,
                       int *newClusterIds);
 
-Clusters clusters;
+
+// Public functions
 
 int *initializePopulation(Image image, DesignParameters designParameters) {
     // Define Clusters structure --> Compute S and L
@@ -34,7 +45,8 @@ int *evolvePopulation(int *population, DesignParameters designParameters) {
 }
 
 
-int testConvergence(Image image, int *population, DesignParameters designParameters, int oldVariance, int *newVariance) {
+int
+testConvergence(Image image, int *population, DesignParameters designParameters, int oldVariance, int *newVariance) {
 
     int hasConverged = 0;
 
@@ -54,16 +66,17 @@ int testConvergence(Image image, int *population, DesignParameters designParamet
     return hasConverged;
 }
 
+// Private functions
+
 int mutateChromosome(int chromosome) {
+    int n = getRandomNumber(0, 7);
+    int bit = (int) pow(2, n);
 
-    //https://www.includehelp.com/c-programs/find-binary-addition-subtraction.aspx
+    return chromosome ^ bit;
+}
 
-    //Select n between 0 and 8
-
-    // if L & 2^n == 1
-    //      binary substraction 2^n
-    // else
-    //      binary addition 2^n
+int getRandomNumber(int min, int max) {
+    return min + rand() % (max + 1 - min);
 }
 
 int *selectionProcess(int *oldPopulation, int *evolvedPopulation, Clusters clusters, DesignParameters designParameters,
@@ -83,4 +96,19 @@ int *selectionProcess(int *oldPopulation, int *evolvedPopulation, Clusters clust
     //      newPopulation(i) = oldPopulation(i)
 
     // return newPopulation
+}
+
+
+void test() {
+//    for (int i = 0; i < 10; i++) {
+//        printf("\n n = %i", getRandomNumber(0, 8));
+//    }
+
+//    for (int i = 0; i < 1000; i++) {
+//        int a = mutateChromosome(0);
+//        printf("\n chromosome 0 -> %d", a);
+//        if (a!=0 && a!=1 && a!=2 && a!=4 && a!=8 && a!=16 && a!=32 && a!=64 && a!=128 ) {
+//            printf(" << ========================  ERROR  ========================");
+//        }
+//    }
 }
