@@ -8,10 +8,10 @@
 
 typedef struct {
     int initialNClusters;
-    int crossoverRate; // 0 < cr < 1
-    int mutationRate;  // 0 < mr < 1
-    int a; // fitness parameter, weight of pixel intensity
-    int b; // fitness parameter, weight of spatial position
+    float crossoverRate; // 0 < cr < 1
+    float mutationRate;  // 0 < mr < 1
+    float a; // fitness parameter, weight of pixel intensity
+    float b; // fitness parameter, weight of spatial position
     int r; // interaction radius
 } DesignParameters;
 

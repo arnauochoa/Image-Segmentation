@@ -13,7 +13,7 @@ Image segmentateImage(Image image);
 
 int main() {
     srand(time(NULL));
-    char *path = "../resources/apple_color.png";
+    char *path = "../resources/testBW_small.png";
 
     // get design parameters from console and check values (percentages and a, b)
 
@@ -24,19 +24,20 @@ int main() {
 //    writeImage(segImage);
 
 //    test();
-//    Image image = buildImage(path);
-//    DesignParameters designParameters;
-//    designParameters.initialNClusters = 3;
-//    designParameters.crossoverRate = 0.9;
-//    designParameters.mutationRate = 0.02;
-//    designParameters.a = 0.7;
-//    designParameters.b = 0.3;
-//
-//    int *population = initializePopulation(image, designParameters);
-//
-//    //Image segImage = segmentateImage(image);
 
     Image grayImage = convertImageToGrayScale(image);
+
+    DesignParameters designParameters;
+    designParameters.initialNClusters = 5;
+    designParameters.crossoverRate = 0.9;
+    designParameters.mutationRate = 0.02;
+    designParameters.a = 0.7;
+    designParameters.b = 0.3;
+
+    int *population = initializePopulation(grayImage, designParameters);
+
+    //Image segImage = segmentateImage(image);
+
 
 //    Image segImage = segmentateImage(grayImage);
 
