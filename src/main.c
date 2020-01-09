@@ -5,20 +5,24 @@
 #include "write_image_matrix.h"
 #include "genetic_algorithm.h"
 #include <stdint.h>
+#include <sys/time.h>
 
 
 Image segmentateImage(Image image);
 
 int main() {
+    srand(time(NULL));
     char *path = "../resources/testBW_small.png";
 
     // get design parameters from console and check values (percentages and a, b)
 
-    Image image = buildImage(path);
+//    Image image = buildImage(path);
+//
+//    Image segImage = segmentateImage(image);
+//
+//    writeImage(segImage);
 
-    Image segImage = segmentateImage(image);
-
-    writeImage(segImage);
+    test();
 
     return EXIT_SUCCESS;
 }
