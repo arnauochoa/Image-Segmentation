@@ -5,6 +5,9 @@
 #include <math.h>
 #include "genetic_algorithm.h"
 #include "image.h"
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
 
 // Global variables
 Clusters clusters;
@@ -23,9 +26,37 @@ int *selectionProcess(int *oldPopulation, int *evolvedPopulation, Clusters clust
 int *initializePopulation(Image image, DesignParameters designParameters) {
     // Define Clusters structure --> Compute S and L
 
-    // Randomly assign clusters to pixels --> Create P(0)
+    // numClusters = K in the paper
+    //label (lambda) goes from 0 to K-1
+    int imageSize = image.width * image.height;
+    //printf("size: %d \n", imageSize);
+    clusters.nClusters = designParameters.initialNClusters;
+    clusters.clusterIds = (int *) malloc(designParameters.initialNClusters);
+
+    for (int lambda = 0; lambda < clusters.nClusters; lambda++) {
+        clusters.clusterIds[lambda] = (int)(pow(2,8) - 1)/clusters.nClusters * lambda;
+        //printf("Label: %d \n",clusters.clusterIds[lambda]);
+    }
+
+    // Randomly assign clusters to pixels --> Create P(0): population of chromosomes: set of chromosomes (alpha) size: n*m (width*height)
+    int *population = (int *) malloc(imageSize);
+    int currentChromosome = 0;
+    int currentCluster = 0;
+    while (currentChromosome < imageSize && currentCluster < clusters.nClusters) {
+        population[currentChromosome] = clusters.clusterIds[currentCluster];
+        //printf("Population: %d \n", population[currentChromosome]);
+        //printf("contador: %d \n", currentChromosome);
+        currentCluster++;
+        currentChromosome++;
+
+        if(currentCluster == clusters.nClusters){
+            currentCluster = 0;
+        }
+    }
+
 
     // Return P(0)
+    return population;
 }
 
 int *evolvePopulation(int *population, DesignParameters designParameters) {
@@ -81,6 +112,8 @@ int getRandomNumber(int min, int max) {
 
 int *selectionProcess(int *oldPopulation, int *evolvedPopulation, Clusters clusters, DesignParameters designParameters,
                       int *newClusterIds) {
+
+
     // Apply fitting function to all of oldPopulation --> f_a
     // Apply fitting function to all of evolvedPopulation --> f_b
 
