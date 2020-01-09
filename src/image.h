@@ -16,4 +16,7 @@ uint8_t *getPixel(Image image, int h, int w);
 
 void fillPixel(Image image, int h, int w, uint8_t *p);
 
+uint8_t *convertPixelsToGray(Image image);
+
+int *getPixelPosition(Image image, int i)
 #endif //IMAGE_SEGMENTATION_IMAGE_H
