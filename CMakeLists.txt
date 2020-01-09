@@ -15,7 +15,9 @@ set(C_SOURCE_FILES
         src/stb-master/stb_image_write.h
         src/image.c src/image.h
         src/write_image_matrix.c src/write_image_matrix.h
-        src/genetic_algorithm.c src/genetic_algorithm.h)
+        src/genetic_algorithm.c src/genetic_algorithm.h
+        src/queue.c src/queue.h
+        src/stack.c src/stack.h)
 
 add_executable(${PROJECT_NAME} ${C_SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} m)

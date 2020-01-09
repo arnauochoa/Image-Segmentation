@@ -57,4 +57,5 @@ Image segmentateImage(Image image) {
 //
 //
 //    return image;
+
 }

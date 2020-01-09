@@ -8,10 +8,10 @@
 
 typedef struct {
     int initialNClusters;
-    double crossoverRate;
-    double mutationRate;
-    double a; // fitness parameter, weight of pixel intensity
-    double b; // fitness parameter, weight of spatial position
+    int crossoverRate; // 0 < cr < 1
+    int mutationRate;  // 0 < mr < 1
+    int a; // fitness parameter, weight of pixel intensity
+    int b; // fitness parameter, weight of spatial position
     int r; // interaction radius
 } DesignParameters;
 
@@ -20,8 +20,8 @@ typedef struct {
     int *clusterIds;
 } Clusters;
 
-int *initializePopulation(Image image,  DesignParameters designParameters);
-int *evolvePopulation(int *population, DesignParameters designParameters);
+int *initializePopulation(Image image, DesignParameters designParameters);
+int *evolvePopulation(Image image, int *population, DesignParameters designParameters);
 int testConvergence(Image image, int *population, DesignParameters designParameters, int oldVariance, int *newVariance);
 
 void test();
