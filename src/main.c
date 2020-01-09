@@ -35,6 +35,13 @@ int main() {
 
     //Image segImage = segmentateImage(image);
 
+    Image grayImage;
+    grayImage.width = image.width;
+    grayImage.height = image.height;
+    grayImage.pixels = convertPixelsToGray(image);
+
+    Image segImage = segmentateImage(grayImage);
+
     //writeImage(segImage);
 
     return EXIT_SUCCESS;

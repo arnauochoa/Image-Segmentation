@@ -7,10 +7,9 @@
 #include <memory.h>
 #include "genetic_algorithm.h"
 #include "image.h"
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
 #include "stack.h"
+
+#define new_max(x, y) ((x) >= (y)) ? (x) : (y)
 
 // Global variables
 Clusters clusters;
@@ -24,9 +23,11 @@ int *getRandomIndices(int numIndices, int numPixels);
 
 int isValueInArray(int value, int *array);
 
-int *selectionProcess(int *oldPopulation, int *evolvedPopulation, Clusters clusters, DesignParameters designParameters,
-                      Stack *newClusterIds);
+int *selectionProcess(Image image, int *oldPopulation, int *evolvedPopulation, Clusters clusters,
+                      DesignParameters designParameters, Stack *newClusterIds);
 
+float
+computeSimilarityFunction(Image image, int *population, int pixel1, int pixel2, DesignParameters designParameters);
 
 // Public functions
 
@@ -41,7 +42,7 @@ int *initializePopulation(Image image, DesignParameters designParameters) {
     clusters.clusterIds = (int *) malloc(designParameters.initialNClusters);
 
     for (int lambda = 0; lambda < clusters.nClusters; lambda++) {
-        clusters.clusterIds[lambda] = (int)(pow(2,8) - 1)/clusters.nClusters * lambda;
+        clusters.clusterIds[lambda] = (int) (pow(2, 8) - 1) / clusters.nClusters * lambda;
         //printf("Label: %d \n",clusters.clusterIds[lambda]);
     }
 
@@ -56,7 +57,7 @@ int *initializePopulation(Image image, DesignParameters designParameters) {
         currentCluster++;
         currentChromosome++;
 
-        if(currentCluster == clusters.nClusters){
+        if (currentCluster == clusters.nClusters) {
             currentCluster = 0;
         }
     }
@@ -180,10 +181,50 @@ int isValueInArray(int value, int *array) {
     return 0;
 }
 
-int *selectionProcess(int *oldPopulation, int *evolvedPopulation, Clusters clusters, DesignParameters designParameters,
-                      Stack *newClusterIds) {
+float
+computeSimilarityFunction(Image image, int *population, int pixel1, int pixel2, DesignParameters designParameters) {
+
+    float diffGray =
+            abs(image.pixels[pixel1] - image.pixels[pixel2]) / new_max(image.pixels[pixel1], image.pixels[pixel2]);
+
+    int *pixel1Position = getPixelPosition(image, pixel1);
+    int nNeighbours = pow(2 * designParameters.r + 1, 2) - 1;
+    float *diffGrayNeighbours[nNeighbours];
+    int *pixelNeighbours[nNeighbours];
+
+    //for (int currentNeighbour = 0; currentNeighbour < designParameters.r; currentNeighbour++){
+
+    //}
+
+    //i*m+j, i*(m-1)+j, i*(m+1)+j, (i*m)+j-r, (i*m)+j+r, i*(m-1)+j-r, i*(m-1)+j+r, i*(m+1)+j-r, i*(m+1)+j+r,
+    //for (int currentNeighbour = 0; currentNeighbour < )
+    //float rho = designParameters.a * diffGray + b * ;
+
+
+
+}
+
+int *selectionProcess(Image image, int *oldPopulation, int *evolvedPopulation, Clusters clusters,
+                      DesignParameters designParameters, Stack *newClusterIds) {
     // Apply fitting function to all of oldPopulation --> f_a
     // Apply fitting function to all of evolvedPopulation --> f_b
+    float **oldPopulationFitted;
+    float **evolvedPopulationFitted;
+    int sizeImage = image.width * image.height;
+
+    for (int currentPixel = 0; currentPixel < sizeImage; currentPixel++) {
+        for (int comparisonPixel = 0; comparisonPixel < sizeImage; comparisonPixel++) {
+            oldPopulationFitted[currentPixel][comparisonPixel] = computeSimilarityFunction(image, oldPopulation,
+                                                                                           currentPixel,
+                                                                                           comparisonPixel,
+                                                                                           designParameters);
+        }
+
+
+    }
+
+
+
 
     // malloc newPopulation (sizeof(oldPopulation))
 
