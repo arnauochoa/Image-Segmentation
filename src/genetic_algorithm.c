@@ -11,6 +11,9 @@
 
 #define new_max(x, y) ((x) >= (y)) ? (x) : (y)
 
+// Macros
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+
 // Global variables
 Clusters clusters;
 
@@ -25,6 +28,12 @@ int isValueInArray(int value, int *array);
 
 int *selectionProcess(Image image, int *oldPopulation, int *evolvedPopulation, Clusters clusters,
                       DesignParameters designParameters, Stack *newClusterIds);
+
+int *findPixelsInCluster(int *population, int clusterId, int imageSize, int *clusterSize);
+
+float variance(int *array, int size);
+
+int *getPixelIntensity(Image image, int *pixelIndices);
 
 float
 computeSimilarityFunction(Image image, int *population, int pixel1, int pixel2, DesignParameters designParameters);
@@ -117,24 +126,75 @@ int *evolvePopulation(Image image, int *population, DesignParameters designParam
 }
 
 int
-testConvergence(Image image, int *population, DesignParameters designParameters, int oldVariance, int *newVariance) {
+testConvergence(Image image, int *population, float oldVariance, float *newVariance) {
 
+    int imageSize = image.height * image.width;
     int hasConverged = 0;
 
-    // int variances[clusters.nClusters]:
+    float varSum = 0;
 
-    // foreach clusters.custerIds --> k
-    //      int *cluster = getAllPixels(population, clusters.clusterIds[k])
-    //      int variances[k] = variance(cluster);   <----- sigma_t(k)
-    // end
+    for (int i = 0; i < clusters.nClusters; i++) {
+        int clusterSize;
+        int *clusterPixels = findPixelsInCluster(population, clusters.clusterIds[i], imageSize, &clusterSize);
+        int *clusterIntensities = getPixelIntensity(image, clusterPixels);
+        varSum += variance(clusterIntensities, clusterSize);
+    }
 
-    // *newVariance = sum(variances);   k=0...K-1    <------- Var_t
+    double phi = sqrt(min(oldVariance, varSum));
 
-    // phi = sqrt(min(oldVariance, newVariance))
+    hasConverged = fabs(oldVariance - varSum) <= phi;
 
-    // hasConverged = abs(oldVariance - newVariance) <= phi
-
+    *newVariance = varSum;
     return hasConverged;
+}
+
+int *findPixelsInCluster(int *population, int clusterId, int imageSize, int *clusterSize) {
+
+    int size = 0;
+
+    // Create aux array bigger than needed
+    int *auxArray = malloc(imageSize * sizeof(int));
+    if (!auxArray) printf("Error allocating memory for auxArray in findPixelsInCluster");
+    int auxIndex = 0;
+
+    // Find pixels of current cluster
+    for (int pix = 0; pix < imageSize; pix++) {
+        if (population[pix] == clusterId) {
+            size++;
+            auxArray[auxIndex] = pix;
+            auxIndex++;
+        }
+    }
+
+    // Copy cluster array to new array with proper size
+    int *pixelsInCluster = malloc(size * sizeof(int));
+    if (!pixelsInCluster) printf("Error allocating memory for pixelsInCluster in findPixelsInCluster");
+    memcpy(pixelsInCluster, auxArray, size * sizeof(int));
+    free(auxArray);
+    *clusterSize = size;
+
+    return auxArray;
+}
+
+float variance(int *array, int size) {
+    float average;
+    float sum = 0.0;
+    float varSum = 0.0;
+    // Sum of all elements and average
+    for (int i = 0; i < size; i++) {
+        sum += array[i];
+    }
+    average = sum / (float) size;
+    // Variance
+    for (int i = 0; i < size; i++) {
+        varSum += powf((array[i] - average), 2);
+    }
+    return varSum / (float) size;
+}
+
+int *getPixelIntensity(Image image, int *pixelIndices) {
+    //TODO: compute grayscale of given pixel
+    return NULL;
 }
 
 // Private functions
@@ -254,10 +314,19 @@ void test() {
 //        }
 //    }
 
-    int *indices = getRandomIndices(10, 255);
-    printf("\n Indices = [");
-    for (int i = 0; i < 10; i++) {
-        printf("%d, ", indices[i]);
-    }
-    printf("]");
+
+//    int population[12] = {1, 1, 2, 1, 4, 5, 2, 1, 6, 6, 9, 1};
+//    int clusterSize;
+//    int *cluster = findPixelsInCluster(population, 2, 12, &clusterSize);
+//    printf("Pixels in cluster id = 2 --> ");
+//    for (int i = 0; i < clusterSize; i++) {
+//        printf("%d, ", cluster[i]);
+//    }
+
+//    int arr[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+//    printf("\n  Variance --> %f", variance(arr, 10));
+
+//    float a = 3.3;
+//    float b = 3.11;
+//    printf("\n min = %f", min(a,b));
 }
