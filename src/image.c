@@ -5,15 +5,31 @@
 
 const unsigned int NUM_CHANNELS = 3;
 
+/**
+ * This function returns the pixel values of the given pixel coordinates. Returns Null if invalid coordinates.
+ * @param image Image structure
+ * @param h Vertical coordinate
+ * @param w Horizontal coordinate
+ * @return  Array with values RGB or NULL if coordinates are not valid
+ */
 uint8_t *getPixel(Image image, int h, int w) {
-    uint8_t *pixel = (uint8_t *) malloc(NUM_CHANNELS * sizeof(int));
-    int pixelPos = (h * image.width * NUM_CHANNELS) + (w * NUM_CHANNELS);
-    pixel[0] = image.pixels[pixelPos];
-    pixel[1] = image.pixels[pixelPos + 1];
-    pixel[2] = image.pixels[pixelPos + 2];
-    return pixel;
+    if (h >= 0 && h < image.height && w >= 0 && w < image.width) {
+        uint8_t *pixel = (uint8_t *) malloc(NUM_CHANNELS * sizeof(int));
+        int pixelPos = (h * image.width * NUM_CHANNELS) + (w * NUM_CHANNELS);
+        pixel[0] = image.pixels[pixelPos];
+        pixel[1] = image.pixels[pixelPos + 1];
+        pixel[2] = image.pixels[pixelPos + 2];
+        return pixel;
+    } else return NULL;
 }
 
+/**
+ * This function fills the specified pixel on an image at the given coordinates.
+ * @param image Image structure to fill
+ * @param h Vertical coordinate
+ * @param w Horizontal coordinate
+ * @param p RGB values of the new pixel
+ */
 void fillPixel(Image image, int h, int w, uint8_t *p) {
     int pixelPos = (h * image.width * NUM_CHANNELS) + (w * NUM_CHANNELS);
     image.pixels[pixelPos] = p[pixelPos];
@@ -21,6 +37,12 @@ void fillPixel(Image image, int h, int w, uint8_t *p) {
     image.pixels[pixelPos + 2] = p[pixelPos + 2];
 }
 
+/**
+ * This function generates a new Image structure where all three RGB of a pixel values correspond to the gray scale
+ * value of the same pixel
+ * @param image Image structure to convert
+ * @return Gray scale image
+ */
 Image convertImageToGrayScale(Image image) {
 
     Image grayImage;
@@ -51,6 +73,12 @@ Image convertImageToGrayScale(Image image) {
     return grayImage;
 }
 
+/**
+ * This function transforms the coordinate of a pixel from array format to vertical and horizontal coordinates
+ * @param image Image structure of the pixel
+ * @param i Vector coordinate
+ * @return
+ */
 int *getPixelPosition(Image image, int i) {
 
     int *pixelPosition[2];
