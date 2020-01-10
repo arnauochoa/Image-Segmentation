@@ -51,33 +51,19 @@ Clusters getCluster() {
  */
 int *initializePopulation(Image image, DesignParameters designParameters) {
     // Define Clusters structure --> Compute S and L
-
-    // numClusters = K in the paper
-    //label (lambda) goes from 0 to K-1
     int imageSize = image.width * image.height;
-    //printf("size: %d \n", imageSize);
     clusters.nClusters = designParameters.initialNClusters;
     clusters.clusterIds = (int *) malloc(clusters.nClusters * sizeof(int));
 
     for (int lambda = 0; lambda < clusters.nClusters; lambda++) {
         clusters.clusterIds[lambda] = (int) ((pow(2, 8) - 1) / clusters.nClusters) * lambda;
-//        printf(" -> New label: %d \n",clusters.clusterIds[lambda]);
     }
-
-//    for (int i = 0; i < clusters.nClusters; ++i) {
-//        printf("%d, ", clusters.clusterIds[i]);
-//    }
 
     // Randomly assign clusters to pixels --> Create P(0): population of chromosomes: set of chromosomes (alpha) size: n*m (width*height)
     int *population = (int *) malloc(imageSize);
-//    int currentChromosome = 0;
     for (int currentChromosome = 0; currentChromosome < imageSize; currentChromosome++) {
-//    while(currentChromosome < imageSize){
         for (int currentId = 0; currentId < clusters.nClusters; currentId++) {
             population[currentChromosome] = clusters.clusterIds[getRandomNumber(0, clusters.nClusters - 1)];
-//            population[currentChromosome] = clusters.clusterIds[currentId];
-//            printf("Population: %d \n", population[currentChromosome]);
-//            currentChromosome++;
         }
     }
 
@@ -122,9 +108,6 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
     int numMutate = (int) (designParameters.mutationRate * numPixels);
     int *mutIndices = getRandomIndices(numMutate, numPixels);
 
-    // Aux array of new clusters
-//    Stack *newClusterIndices = createStack(numMutate);
-
     // Mutate each selected chromosome
     for (int i = 0; i < numMutate; i++) {
         int newChromosome = mutateChromosome(evolvedPopulation[mutIndices[i]]);
@@ -141,8 +124,6 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
                 }
             }
             newChromosome = clusters.clusterIds[smallerInd];
-//            // Save indices of pixels of new Clusters in newClusterIndices (stack sorted so that smaller is on top).
-//            push(newClusterIndices, mutIndices[i]);
         }
         evolvedPopulation[mutIndices[i]] = newChromosome;
     }
@@ -193,8 +174,6 @@ int testConvergence(Image image, int *population, float oldVariance, float *newV
  * @return Int array of the pixels indices wrt the image
  */
 int *findPixelsInCluster(int *population, int clusterId, int imageSize, int *clusterSize) {
-//    printf("\n --->> CLUST ID = %d<<--- \n", clusterId);
-
     int size = 0;
 
     // Create aux array bigger than needed
@@ -221,6 +200,12 @@ int *findPixelsInCluster(int *population, int clusterId, int imageSize, int *clu
     return auxArray;
 }
 
+/**
+ * This function computes de variance in an array
+ * @param array Array of the values to compute the variance from
+ * @param size Size of the array
+ * @return
+ */
 float variance(int *array, int size) {
     float average;
     float sum = 0.0;
@@ -237,6 +222,13 @@ float variance(int *array, int size) {
     return varSum / (float) size;
 }
 
+/**
+ * This functions returns an array with the color intensities of the pixels given to the function
+ * @param image Image structure of the actual image
+ * @param pixelIndices Array with the indexes of the pixels
+ * @param size Size of the array of pixels
+ * @return Array with the color intensities of the pixels
+ */
 int *getClusterIntensities(Image image, int *pixelIndices, int size) {
     int *clusterIntensities = malloc(size * sizeof(int));
     for (int i = 0; i < size; ++i) {
@@ -246,7 +238,11 @@ int *getClusterIntensities(Image image, int *pixelIndices, int size) {
 }
 
 // Private functions
-
+/**
+ * This functions modifies the nth bit of the chromosome of a pixel
+ * @param chromosome Chromosome to modify
+ * @return Modified chromosome
+ */
 int mutateChromosome(int chromosome) {
     int n = getRandomNumber(0, 7);
     int bit = (int) pow(2, n);
@@ -254,13 +250,21 @@ int mutateChromosome(int chromosome) {
     return chromosome ^ bit;
 }
 
+/**
+ * This function returns a random number between two values
+ * @param min Int value of the minimum possible random number
+ * @param max Int value of the maximum possible random number
+ * @return Generated random number
+ */
 int getRandomNumber(int min, int max) {
     return min + rand() % (max + 1 - min);
 }
 
 /**
- * The Knuth algorithm --> Complexity O(N), N=numPixels. Sorted result.
- * https://stackoverflow.com/questions/1608181/unique-random-numbers-in-an-integer-array-in-the-c-programming-language
+ * This function generates an array of different random numbers given the interval [0 to numPixels]
+ * @param numIndices Length of the resulting array
+ * @param numPixels Maximum value
+ * @return Resulting array of random numbers
  */
 int *getRandomIndices(int numIndices, int numPixels) {
     int *indices = malloc(numIndices * sizeof(int));
@@ -281,6 +285,13 @@ int *getRandomIndices(int numIndices, int numPixels) {
     return indices;
 }
 
+/**
+ * Returns 1 if the given value is in the given array
+ * @param value Value to find
+ * @param array Array where to find the value
+ * @param size Size of the array
+ * @return 1 if the given value is in the given array, 0 otherwise
+ */
 int isValueInArray(int value, int *array, int size) {
     for (int i = 0; i < size; i++) {
         if (array[i] == value)
@@ -289,6 +300,13 @@ int isValueInArray(int value, int *array, int size) {
     return 0;
 }
 
+/**
+ * Find the index of a given value in a given array
+ * @param value Value to find
+ * @param array Array where to find the value
+ * @param size Size of the array
+ * @return The index of the value in the array. -1 if not found
+ */
 int findIndex(int value, int *array, int size) {
     for (int i = 0; i < size; i++) {
         if (array[i] == value)
@@ -297,6 +315,14 @@ int findIndex(int value, int *array, int size) {
     return -1;
 }
 
+/**
+ * This functions returns the result of applying the fitting function of a population
+ * @param image Image structure
+ * @param pixel Reference pixel
+ * @param population Set of chromosomes of the pixels
+ * @param designParameters design parameters structure
+ * @return Result of the fitting function
+ */
 float computeSimilarityFunction(Image image, int pixel, int *population, DesignParameters designParameters) {
     int pixelGrayValue = image.pixels[pixel * NUM_CHANNELS];
     int *meanGrayValueClusters = obtainClusterGrayValues(image, population);
@@ -349,6 +375,14 @@ float computeSimilarityFunction(Image image, int pixel, int *population, DesignP
 
 }
 
+/**
+ * This function returns the new population after comparing the fitting results
+ * @param image Image structure
+ * @param oldPopulation Set of old chromosomes
+ * @param evolvedPopulation Set of evolved chromosomes (after crossover and mutation)
+ * @param designParameters design parameters structure
+ * @return Array of int corresponding to the new chromosomes (population)
+ */
 int *selectionProcess(Image image, int *oldPopulation, int *evolvedPopulation, DesignParameters designParameters) {
     // Apply fitting function to all of oldPopulation --> f_a
     // Apply fitting function to all of evolvedPopulation --> f_b
@@ -386,24 +420,12 @@ int *selectionProcess(Image image, int *oldPopulation, int *evolvedPopulation, D
         }
     }
     return newPopulation;
-}
-
-//void updateClusterMeanGrayValue(Clusters cluster, int *population, Image image) {
-//
-//    int clusterSize;
-//    int *pixelsInCluster;
-//    int imageSize = image.width * image.height;
-//    int grayValuePixelInCluster;
-//    for (int currentCluster = 0; currentCluster < cluster.nClusters; currentCluster++) {
-//        pixelsInCluster = findPixelsInCluster(population, cluster.clusterIds[currentCluster], imageSize, &clusterSize);
-//        for (int currentPixel = 0; currentPixel < clusterSize; currentPixel++) {
-//            grayValuePixelInCluster =
-//                    grayValuePixelInCluster + image.pixels[pixelsInCluster[currentPixel] * NUM_CHANNELS];
-//        }
-//        cluster.clusterGrayValues[currentCluster] = grayValuePixelInCluster / clusterSize;
-//    }
-//}
-
+}/**
+ * This functions returns an array of the gray values of the pixels that belong to a same cluster
+ * @param image Image structure
+ * @param population Chromosomes of the cluster
+ * @return Array of the gray values
+ */
 int *obtainClusterGrayValues(Image image, int *population) {
     int imageSize = image.width * image.height;
     int clusterSize;
@@ -411,77 +433,12 @@ int *obtainClusterGrayValues(Image image, int *population) {
     for (int clust = 0; clust < clusters.nClusters; ++clust) {
         int *pixelsInCluster = findPixelsInCluster(population, clusters.clusterIds[clust], imageSize, &clusterSize);
         int *grayscalesInCluster = getClusterIntensities(image, pixelsInCluster, clusterSize);
-//        printf("\n ---> Cluster = %d ,(label = %d)", clust, clusters.clusterIds[clust]);
-//        for (int j = 0; j < clusterSize; ++j) {
-//            printf("   \n pixel %d (pos = %d) ---> %d", j, pixelsInCluster[j], grayscalesInCluster[j]);
-//        }
+
         int sum = 0;
         for (int i = 0; i < clusterSize; i++) {
             sum += grayscalesInCluster[i];
         }
-//        printf("\n --->> CLUSTER SIZE = %d<<--- \n", clusterSize);
         clustersGrayValues[clust] = (clusterSize == 0) ? 0 : (sum / clusterSize);
-//        printf("\n --->> HELLO 2.5 <<--- \n");
-
-//        printf("  >> sum: %d", sum);
-//        printf("  >> clusterSize: %d", clusterSize);
     }
-
-//    printf("\n ====>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
-//    for (int k = 0; k < clusters.nClusters; ++k) {
-//        printf("%d, ", clusters.clusterGrayValues[k]);
-//    }
     return clustersGrayValues;
-}
-
-void test() {
-//    for (int i = 0; i < 10; i++) {
-//        printf("\n n = %i", getRandomNumber(0, 8));
-//    }
-
-//    for (int i = 0; i < 1000; i++) {
-//        int a = mutateChromosome(0);
-//        printf("\n chromosome 0 -> %d", a);
-//        if (a!=0 && a!=1 && a!=2 && a!=4 && a!=8 && a!=16 && a!=32 && a!=64 && a!=128 ) {
-//            printf(" << ========================  ERROR  ========================");
-//        }
-//    }
-
-
-//    int population[12] = {1, 1, 2, 1, 4, 5, 2, 1, 6, 6, 9, 1};
-//    int clusterSize;
-//    int *cluster = findPixelsInCluster(population, 2, 12, &clusterSize);
-//    printf("Pixels in cluster id = 2 --> ");
-//    for (int i = 0; i < clusterSize; i++) {
-//        printf("%d, ", cluster[i]);
-//    }
-
-//    int arr[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-//    printf("\n  Variance --> %f", variance(arr, 10));
-
-//    float a = 3.3;
-//    float b = 3.11;
-//    printf("\n min = %f", min(a,b));
-
-//    for (int i = 0; i < 10; i++) {
-//        printf("\n ind %d --> %d", i, getRandomNumber(1, 20));
-//    }
-
-//    int *indices = malloc(10 * sizeof(int));
-//    getRandomIndices(10, 100, indices);
-//    Stack *stack = createStack(15);
-//    for (int i = 0; i < 10; i++) {
-//        printf("\n push %d --> %d", i, indices[i]);
-//        push(stack, indices[i]);
-//    }
-//    printf("\n==========================================================");
-//    printf("\n peek 1 --> %d", peek(stack));
-//    printf("\n peek 1 --> %d", peek(stack));
-//    printf("\n peek 1 --> %d", peek(stack));
-//    printf("\n==========================================================");
-//    for (int i = 0; i < 10; i++) {
-//        printf("\n pop %d --> %d", i, pop(stack));
-//    }
-
-
 }

@@ -9,36 +9,9 @@
 #include <float.h>
 #include <time.h>
 
-Image segmentateImage(Image image);
-
-void checkDesignParameters(DesignParameters designParameters){
-
-    if(designParameters.crossoverRate < 0 || designParameters.crossoverRate > 1){
-        printf(" << ========================  ERROR  ========================");
-    }
-    if(designParameters.mutationRate < 0 || designParameters.mutationRate > 1){
-        printf(" << ========================  ERROR  ========================");
-    }
-    if(designParameters.a < 0 || designParameters.b < 0 || (designParameters.a + designParameters.b != 1)){
-        printf(" << ========================  ERROR  ========================");
-    }
-
-    EXIT_FAILURE;
-}
-
-DesignParameters getDesignParameters(){
-    DesignParameters designParameters;
-    designParameters.initialNClusters = 10;
-    designParameters.crossoverRate = 0.9;
-    designParameters.mutationRate = 0.05;
-    designParameters.a = 0.5;
-    designParameters.b = 0.5;
-    designParameters.r = 3;
-
-    checkDesignParameters(designParameters);
-
-    return designParameters;
-}
+Image segmentImage(Image image);
+void checkDesignParameters(DesignParameters designParameters);
+DesignParameters getDesignParameters();
 
 int main() {
     srand(time(NULL));
@@ -48,16 +21,23 @@ int main() {
     Image image = buildImage(path);
     Image grayImage = convertImageToGrayScale(image);
 
-    Image segImage = segmentateImage(grayImage);
+    Image segImage = segmentImage(grayImage);
 
     writeImage(segImage);
 
     return EXIT_SUCCESS;
 }
 
-Image segmentateImage(Image image) {
+/**
+ * This functions calls all the main function of the genetic algorithm in order to segment the image
+ * @param image Image structure of the original image
+ * @return Image structure of the resulting image
+ */
+Image segmentImage(Image image) {
     // get design parameters from console and check values (percentages and a, b)
     DesignParameters designParameters = getDesignParameters();
+
+    // Generate the initial population
     int *population = initializePopulation(image, designParameters);
 
     int hasConverged = 0;
@@ -66,12 +46,13 @@ Image segmentateImage(Image image) {
 
     int iter = 0;
 //    while (!hasConverged) {
-    while (iter<20) {
-        printf("\n ===========>> START ITER %d <<=========== \n", iter);
+    while (iter<180) {
+        printf("\n ===========>> STARTING ITER %d <<=========== \n", iter);
+        // Generate a new population from the previous one
         population = evolvePopulation(image, population, designParameters);
+        // Check convergence
         hasConverged = testConvergence(image, population, oldVariance, &newVariance);
         oldVariance = newVariance;
-//        printf("\n ===========>> END ITER %d <<=========== \n", iter);
         iter++;
     }
 
@@ -102,4 +83,33 @@ Image segmentateImage(Image image) {
     printf("Has converged: %d. After %d iterations", hasConverged, iter);
 
     return newImage;
+}
+
+void checkDesignParameters(DesignParameters designParameters){
+
+    if(designParameters.crossoverRate < 0 || designParameters.crossoverRate > 1){
+        printf(" << ========================  ERROR  ========================");
+    }
+    if(designParameters.mutationRate < 0 || designParameters.mutationRate > 1){
+        printf(" << ========================  ERROR  ========================");
+    }
+    if(designParameters.a < 0 || designParameters.b < 0 || (designParameters.a + designParameters.b != 1)){
+        printf(" << ========================  ERROR  ========================");
+    }
+
+    EXIT_FAILURE;
+}
+
+DesignParameters getDesignParameters(){
+    DesignParameters designParameters;
+    designParameters.initialNClusters = 10;
+    designParameters.crossoverRate = 0.9;
+    designParameters.mutationRate = 0.05;
+    designParameters.a = 0.5;
+    designParameters.b = 0.5;
+    designParameters.r = 3;
+
+    checkDesignParameters(designParameters);
+
+    return designParameters;
 }
