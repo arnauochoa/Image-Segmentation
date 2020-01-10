@@ -64,7 +64,7 @@ Image convertImageToGrayScale(Image image) {
     int grayChannels = 3;
     size_t grayImageSize = image.width * image.height * grayChannels;
 
-    grayImage.pixels = (uint8_t *) malloc(grayImageSize);
+    grayImage.pixels = (uint8_t *) malloc(grayImageSize * sizeof(uint8_t));
 
     if (grayImage.pixels == NULL) {
         printf("Unable to allocate memory for the gray image.\n");

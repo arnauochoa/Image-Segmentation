@@ -22,7 +22,7 @@ int mutateChromosome(int chromosome);
 
 int getRandomNumber(int min, int max);
 
-int *getRandomIndices(int numIndices, int numPixels, int *indices);
+int *getRandomIndices(int numIndices, int numPixels);
 
 int isValueInArray(int value, int *array, int size);
 
@@ -34,12 +34,12 @@ float variance(int *array, int size);
 
 int *getClusterIntensities(Image image, int *pixelIndices, int size);
 
-float computeSimilarityFunction(Image image, int pixel, int meanGrayValueCluster, DesignParameters designParameters);
+float computeSimilarityFunction(Image image, int pixel, int *population, DesignParameters designParameters);
 
-void obtainClusterGrayValues(Image image, int *population);
+int *obtainClusterGrayValues(Image image, int *population);
 
 // Public functions
-Clusters getCluster(){
+Clusters getCluster() {
     return clusters;
 }
 
@@ -61,7 +61,7 @@ int *initializePopulation(Image image, DesignParameters designParameters) {
 
     for (int lambda = 0; lambda < clusters.nClusters; lambda++) {
         clusters.clusterIds[lambda] = (int) ((pow(2, 8) - 1) / clusters.nClusters) * lambda;
-        printf(" -> New label: %d \n",clusters.clusterIds[lambda]);
+//        printf(" -> New label: %d \n",clusters.clusterIds[lambda]);
     }
 
 //    for (int i = 0; i < clusters.nClusters; ++i) {
@@ -70,19 +70,19 @@ int *initializePopulation(Image image, DesignParameters designParameters) {
 
     // Randomly assign clusters to pixels --> Create P(0): population of chromosomes: set of chromosomes (alpha) size: n*m (width*height)
     int *population = (int *) malloc(imageSize);
-    int currentChromosome = 0;
-    //for (int currentChromosome = 0; currentChromosome < imageSize; currentChromosome++) {
-    while(currentChromosome < imageSize){
+//    int currentChromosome = 0;
+    for (int currentChromosome = 0; currentChromosome < imageSize; currentChromosome++) {
+//    while(currentChromosome < imageSize){
         for (int currentId = 0; currentId < clusters.nClusters; currentId++) {
-            //population[currentChromosome] = clusters.clusterIds[getRandomNumber(0, clusters.nClusters - 1)];
-            population[currentChromosome] = clusters.clusterIds[currentId];
-            printf("Population: %d \n", population[currentChromosome]);
-            currentChromosome++;
+            population[currentChromosome] = clusters.clusterIds[getRandomNumber(0, clusters.nClusters - 1)];
+//            population[currentChromosome] = clusters.clusterIds[currentId];
+//            printf("Population: %d \n", population[currentChromosome]);
+//            currentChromosome++;
         }
     }
 
-    obtainClusterGrayValues(image, population);
-
+    clusters.clusterGrayValues = obtainClusterGrayValues(image, population);
+    printf("\n ============ END INITIALIZE ============ \n");
     // Return P(0)
     return population;
 }
@@ -99,24 +99,28 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
     int evolvedPopulation[numPixels];
 
     // Check if num of selected chromosome is even
-    int numCrossover = (int) designParameters.crossoverRate * numPixels;
+    int numCrossover = (int) (designParameters.crossoverRate * numPixels);
+    numCrossover = (numCrossover % 2 == 0) ? numCrossover : numCrossover - 1;
 
     // Randomly select numCrossover of chromosomes of population
-    int *crossIndices = malloc(numCrossover * sizeof(int));
-    getRandomIndices(numCrossover, numPixels, crossIndices);
+    int *crossIndices = getRandomIndices(numCrossover, numPixels);
+
     int *firstHalf = crossIndices;
     int *secondHalf = crossIndices + (numCrossover / 2);
 
+    memcpy(evolvedPopulation, oldPopulation, numPixels * sizeof(int));
+
     // Cross chromosomes half and half
+    int aux;
     for (int i = 0; i < (numCrossover / 2); i++) {
-        evolvedPopulation[secondHalf[i]] = oldPopulation[firstHalf[i]];
-        evolvedPopulation[firstHalf[i]] = oldPopulation[secondHalf[i]];
+        aux = evolvedPopulation[firstHalf[i]];
+        evolvedPopulation[firstHalf[i]] = evolvedPopulation[secondHalf[i]];
+        evolvedPopulation[secondHalf[i]] = aux;
     }
 
     // Mutate
-    int numMutate = (int) designParameters.mutationRate * numPixels;
-    int mutIndices[numMutate];
-    getRandomIndices(numMutate, numPixels, &numMutate);
+    int numMutate = (int) (designParameters.mutationRate * numPixels);
+    int *mutIndices = getRandomIndices(numMutate, numPixels);
 
     // Aux array of new clusters
 //    Stack *newClusterIndices = createStack(numMutate);
@@ -131,7 +135,7 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
             int smaller = abs(newChromosome - clusters.clusterIds[0]);
             for (int clust = 1; clust < clusters.nClusters; ++clust) {
                 int diff = abs(newChromosome - clusters.clusterIds[clust]);
-                if(smaller > diff){
+                if (smaller > diff) {
                     smaller = diff;
                     smallerInd = clust;
                 }
@@ -142,10 +146,9 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
         }
         evolvedPopulation[mutIndices[i]] = newChromosome;
     }
-
     // selection Process
     int *newPopulation = selectionProcess(image, oldPopulation, evolvedPopulation, designParameters);
-    obtainClusterGrayValues(image, newPopulation);
+    clusters.clusterGrayValues = obtainClusterGrayValues(image, newPopulation);
 
     // Return newPopulation P(t+1)
     return newPopulation;
@@ -190,6 +193,7 @@ int testConvergence(Image image, int *population, float oldVariance, float *newV
  * @return Int array of the pixels indices wrt the image
  */
 int *findPixelsInCluster(int *population, int clusterId, int imageSize, int *clusterSize) {
+//    printf("\n --->> CLUST ID = %d<<--- \n", clusterId);
 
     int size = 0;
 
@@ -258,7 +262,8 @@ int getRandomNumber(int min, int max) {
  * The Knuth algorithm --> Complexity O(N), N=numPixels. Sorted result.
  * https://stackoverflow.com/questions/1608181/unique-random-numbers-in-an-integer-array-in-the-c-programming-language
  */
-int *getRandomIndices(int numIndices, int numPixels, int *indices) {
+int *getRandomIndices(int numIndices, int numPixels) {
+    int *indices = malloc(numIndices * sizeof(int));
     int in, im;
 
     im = 0;
@@ -270,6 +275,7 @@ int *getRandomIndices(int numIndices, int numPixels, int *indices) {
             /* Take it */
             indices[im++] = in;
     }
+
     assert(im == numIndices);
 
     return indices;
@@ -291,9 +297,19 @@ int findIndex(int value, int *array, int size) {
     return -1;
 }
 
-float computeSimilarityFunction(Image image, int pixel, int meanGrayValueCluster, DesignParameters designParameters) {
+float computeSimilarityFunction(Image image, int pixel, int *population, DesignParameters designParameters) {
     int pixelGrayValue = image.pixels[pixel * NUM_CHANNELS];
-    float diffGray = abs(pixelGrayValue - meanGrayValueCluster) / max(pixelGrayValue, meanGrayValueCluster);
+    int *meanGrayValueClusters = obtainClusterGrayValues(image, population);
+    int pixelClusterLabel = population[pixel];
+    int clusterIndex = findIndex(pixelClusterLabel, clusters.clusterIds, clusters.nClusters);
+    if (clusterIndex == -1) {
+        printf("\n There was an error indexing the cluster label\n");
+        printf("pixelClusterLabel --> %d \n", pixelClusterLabel);
+        exit(EXIT_FAILURE);
+    }
+
+    float diffGray = (float) abs(pixelGrayValue - meanGrayValueClusters[clusterIndex]) /
+                     (float) max(pixelGrayValue, meanGrayValueClusters[clusterIndex]);
 
     int *pixelPosition = getPixelPosition(image, pixel);
     int nNeighbours = (int) pow(2 * designParameters.r + 1, 2) - 1;
@@ -301,11 +317,15 @@ float computeSimilarityFunction(Image image, int pixel, int meanGrayValueCluster
     uint8_t *neighboursGrayValues = malloc(nNeighbours * sizeof(int));
 
     int n = 0;
-    for (int row = pixelPosition[0] - designParameters.r; row < 2 * designParameters.r + 1; row++) {
-        for (int col = pixelPosition[1] - designParameters.r; col < 2 * designParameters.r + 1; col++) {
+    int startRow = (pixelPosition[0] - designParameters.r);
+    int endRow = startRow + (2 * designParameters.r + 1);
+    int startColumn = (pixelPosition[1] - designParameters.r);
+    int endColumn = startColumn + (2 * designParameters.r + 1);
+    for (int row = startRow; row < endRow; row++) {
+        for (int col = startColumn; col < endColumn; col++) {
             if (row != pixelPosition[0] || col != pixelPosition[1]) { // If not is "our" pixel
                 uint8_t *currentPixel = getPixel(image, row, col);
-                if (currentPixel) { // TODO: not sure
+                if (currentPixel != NULL) { // TODO: not sure
                     neighboursGrayValues[n] = currentPixel[0];
                     n++;
                 }
@@ -313,13 +333,17 @@ float computeSimilarityFunction(Image image, int pixel, int meanGrayValueCluster
         }
     }
 
+
+
     float diffGrayNeighbours = 0;
     for (int actualNeighbours = 0; actualNeighbours < n; actualNeighbours++) {
-        diffGrayNeighbours += abs(neighboursGrayValues[actualNeighbours] - meanGrayValueCluster) /
-                              max(neighboursGrayValues[actualNeighbours], meanGrayValueCluster);
+        diffGrayNeighbours +=
+                (float) abs(neighboursGrayValues[actualNeighbours] - meanGrayValueClusters[clusterIndex]) /
+                (float) max(neighboursGrayValues[actualNeighbours], meanGrayValueClusters[clusterIndex]);
     }
 
-    float rho = designParameters.a * diffGray + designParameters.b * diffGrayNeighbours;
+    float rho = (designParameters.a * diffGray) + (designParameters.b * diffGrayNeighbours);
+
 
     return rho;
 
@@ -334,7 +358,6 @@ int *selectionProcess(Image image, int *oldPopulation, int *evolvedPopulation, D
     float evolvedPopulationFitted[sizeImage];   // Results of fitting function on evolved population
 
     int *newPopulation = malloc(sizeImage * sizeof(int));
-
     for (int currentPixel = 0; currentPixel < sizeImage; currentPixel++) {
 
         int pixelCluster = findIndex(oldPopulation[currentPixel], clusters.clusterIds, clusters.nClusters);
@@ -349,12 +372,12 @@ int *selectionProcess(Image image, int *oldPopulation, int *evolvedPopulation, D
 
             exit(EXIT_FAILURE);
         }
-        oldPopulationFitted[currentPixel] = computeSimilarityFunction(image, currentPixel,
-                                                                      clusters.clusterGrayValues[pixelCluster],
+        oldPopulationFitted[currentPixel] = computeSimilarityFunction(image, currentPixel, oldPopulation,
                                                                       designParameters);
+
         evolvedPopulationFitted[currentPixel] = computeSimilarityFunction(image,
                                                                           currentPixel,
-                                                                          clusters.clusterGrayValues[pixelCluster],
+                                                                          evolvedPopulation,
                                                                           designParameters);
         if (evolvedPopulationFitted[currentPixel] < oldPopulationFitted[currentPixel]) {
             newPopulation[currentPixel] = evolvedPopulation[currentPixel];
@@ -381,23 +404,34 @@ int *selectionProcess(Image image, int *oldPopulation, int *evolvedPopulation, D
 //    }
 //}
 
-void obtainClusterGrayValues(Image image, int *population) {
+int *obtainClusterGrayValues(Image image, int *population) {
     int imageSize = image.width * image.height;
     int clusterSize;
-    clusters.clusterGrayValues = malloc(clusters.nClusters * sizeof(int));
+    int *clustersGrayValues = malloc(clusters.nClusters * sizeof(int));
     for (int clust = 0; clust < clusters.nClusters; ++clust) {
         int *pixelsInCluster = findPixelsInCluster(population, clusters.clusterIds[clust], imageSize, &clusterSize);
         int *grayscalesInCluster = getClusterIntensities(image, pixelsInCluster, clusterSize);
-        printf("\n ---> Cluster = %d ,(label = %d)", clust, clusters.clusterIds[clust]);
-        for (int j = 0; j < clusterSize; ++j) {
-            printf("   \n pixel %d (pos = %d) ---> %d", j, pixelsInCluster[j], grayscalesInCluster[j]);
-        }
+//        printf("\n ---> Cluster = %d ,(label = %d)", clust, clusters.clusterIds[clust]);
+//        for (int j = 0; j < clusterSize; ++j) {
+//            printf("   \n pixel %d (pos = %d) ---> %d", j, pixelsInCluster[j], grayscalesInCluster[j]);
+//        }
         int sum = 0;
-        for (int i = 0; i < clusterSize; ++i) {
+        for (int i = 0; i < clusterSize; i++) {
             sum += grayscalesInCluster[i];
         }
-        clusters.clusterGrayValues[clust] = sum / clusterSize;
+//        printf("\n --->> CLUSTER SIZE = %d<<--- \n", clusterSize);
+        clustersGrayValues[clust] = (clusterSize == 0) ? 0 : (sum / clusterSize);
+//        printf("\n --->> HELLO 2.5 <<--- \n");
+
+//        printf("  >> sum: %d", sum);
+//        printf("  >> clusterSize: %d", clusterSize);
     }
+
+//    printf("\n ====>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+//    for (int k = 0; k < clusters.nClusters; ++k) {
+//        printf("%d, ", clusters.clusterGrayValues[k]);
+//    }
+    return clustersGrayValues;
 }
 
 void test() {
@@ -433,21 +467,21 @@ void test() {
 //        printf("\n ind %d --> %d", i, getRandomNumber(1, 20));
 //    }
 
-    int *indices = malloc(10 * sizeof(int));
-    getRandomIndices(10, 100, indices);
-    Stack *stack = createStack(15);
-    for (int i = 0; i < 10; i++) {
-        printf("\n push %d --> %d", i, indices[i]);
-        push(stack, indices[i]);
-    }
-    printf("\n==========================================================");
-    printf("\n peek 1 --> %d", peek(stack));
-    printf("\n peek 1 --> %d", peek(stack));
-    printf("\n peek 1 --> %d", peek(stack));
-    printf("\n==========================================================");
-    for (int i = 0; i < 10; i++) {
-        printf("\n pop %d --> %d", i, pop(stack));
-    }
+//    int *indices = malloc(10 * sizeof(int));
+//    getRandomIndices(10, 100, indices);
+//    Stack *stack = createStack(15);
+//    for (int i = 0; i < 10; i++) {
+//        printf("\n push %d --> %d", i, indices[i]);
+//        push(stack, indices[i]);
+//    }
+//    printf("\n==========================================================");
+//    printf("\n peek 1 --> %d", peek(stack));
+//    printf("\n peek 1 --> %d", peek(stack));
+//    printf("\n peek 1 --> %d", peek(stack));
+//    printf("\n==========================================================");
+//    for (int i = 0; i < 10; i++) {
+//        printf("\n pop %d --> %d", i, pop(stack));
+//    }
 
 
 }
