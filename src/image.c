@@ -28,14 +28,24 @@ uint8_t *getPixel(Image image, int h, int w) {
  * @param image Image structure to fill
  * @param h Vertical coordinate
  * @param w Horizontal coordinate
- * @param p RGB values of the new pixel
+ * @param arr RGB values of the new pixel
  */
-void fillPixel(Image image, int h, int w, uint8_t *p) {
+void fillPixelFromArray(Image image, int h, int w, uint8_t *arr) {
     int pixelPos = (h * image.width * NUM_CHANNELS) + (w * NUM_CHANNELS);
-    image.pixels[pixelPos] = p[pixelPos];
-    image.pixels[pixelPos + 1] = p[pixelPos + 1];
-    image.pixels[pixelPos + 2] = p[pixelPos + 2];
+    image.pixels[pixelPos] = arr[pixelPos];
+    image.pixels[pixelPos + 1] = arr[pixelPos + 1];
+    image.pixels[pixelPos + 2] = arr[pixelPos + 2];
 }
+
+
+Image fillPixel(Image image, int h, int w, uint8_t *pix) {
+    int pixelPos = (h * image.width * NUM_CHANNELS) + (w * NUM_CHANNELS);
+    image.pixels[pixelPos] = pix[0];
+    image.pixels[pixelPos + 1] = pix[1];
+    image.pixels[pixelPos + 2] = pix[2];
+    return image;
+}
+
 
 /**
  * This function generates a new Image structure where all three RGB of a pixel values correspond to the gray scale
@@ -54,7 +64,7 @@ Image convertImageToGrayScale(Image image) {
     int grayChannels = 3;
     size_t grayImageSize = image.width * image.height * grayChannels;
 
-    grayImage.pixels = (uint8_t *) malloc(grayImageSize);
+    grayImage.pixels = (uint8_t *) malloc(grayImageSize * sizeof(uint8_t));
 
     if (grayImage.pixels == NULL) {
         printf("Unable to allocate memory for the gray image.\n");
@@ -80,10 +90,9 @@ Image convertImageToGrayScale(Image image) {
  * @return
  */
 int *getPixelPosition(Image image, int i) {
+    int *pixelPosition = malloc(2 * sizeof(int));
+    pixelPosition[0] = i / image.width;
+    pixelPosition[1] = i % image.width;
 
-    int *pixelPosition[2];
-    *pixelPosition[0] = i / image.width;
-    *pixelPosition[1] = i % image.width;
-
-    return *pixelPosition;
+    return pixelPosition;
 }
