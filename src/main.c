@@ -46,7 +46,7 @@ Image segmentImage(Image image) {
 
     int iter = 0;
 //    while (!hasConverged) {
-    while (iter<180) {
+    while (iter<80) {
         printf("\n ===========>> STARTING ITER %d <<=========== \n", iter);
         // Generate a new population from the previous one
         population = evolvePopulation(image, population, designParameters);
