@@ -104,6 +104,8 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
         evolvedPopulation[secondHalf[i]] = aux;
     }
 
+    free(crossIndices);
+
     // Mutate
     int numMutate = (int) (designParameters.mutationRate * numPixels);
     int *mutIndices = getRandomIndices(numMutate, numPixels);
@@ -127,6 +129,7 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
         }
         evolvedPopulation[mutIndices[i]] = newChromosome;
     }
+    free(mutIndices);
     // selection Process
     int *newPopulation = selectionProcess(image, oldPopulation, evolvedPopulation, designParameters);
     clusters.clusterGrayValues = obtainClusterGrayValues(image, newPopulation);
@@ -155,6 +158,7 @@ int testConvergence(Image image, int *population, float oldVariance, float *newV
         int *clusterPixels = findPixelsInCluster(population, clusters.clusterIds[i], imageSize, &clusterSize);
         int *clusterIntensities = getClusterIntensities(image, clusterPixels, clusterSize);
         varSum += variance(clusterIntensities, clusterSize);
+        free(clusterIntensities);
     }
 
     double phi = sqrt(min(oldVariance, varSum));
@@ -177,27 +181,20 @@ int *findPixelsInCluster(int *population, int clusterId, int imageSize, int *clu
     int size = 0;
 
     // Create aux array bigger than needed
-    int *auxArray = malloc(imageSize * sizeof(int));
-    if (!auxArray) printf("Error allocating memory for auxArray in findPixelsInCluster");
+    int *pixelsInCluster = malloc(imageSize * sizeof(int));
+    if (!pixelsInCluster) printf("Error allocating memory for pixelsInCluster in findPixelsInCluster");
     int auxIndex = 0;
 
     // Find pixels of current cluster
     for (int pix = 0; pix < imageSize; pix++) {
         if (population[pix] == clusterId) {
             size++;
-            auxArray[auxIndex] = pix;
+            pixelsInCluster[auxIndex] = pix;
             auxIndex++;
         }
     }
-
-    // Copy cluster array to new array with proper size
-    int *pixelsInCluster = malloc(size * sizeof(int));
-    if (!pixelsInCluster) printf("Error allocating memory for pixelsInCluster in findPixelsInCluster");
-    memcpy(pixelsInCluster, auxArray, size * sizeof(int));
-    free(auxArray);
     *clusterSize = size;
-
-    return auxArray;
+    return pixelsInCluster;
 }
 
 /**
@@ -269,9 +266,7 @@ int getRandomNumber(int min, int max) {
 int *getRandomIndices(int numIndices, int numPixels) {
     int *indices = malloc(numIndices * sizeof(int));
     int in, im;
-
     im = 0;
-
     for (in = 0; in < numPixels && im < numIndices; ++in) {
         int rn = numPixels - in;
         int rm = numIndices - im;
@@ -279,9 +274,7 @@ int *getRandomIndices(int numIndices, int numPixels) {
             /* Take it */
             indices[im++] = in;
     }
-
     assert(im == numIndices);
-
     return indices;
 }
 
@@ -351,15 +344,13 @@ float computeSimilarityFunction(Image image, int pixel, int *population, DesignP
         for (int col = startColumn; col < endColumn; col++) {
             if (row != pixelPosition[0] || col != pixelPosition[1]) { // If not is "our" pixel
                 uint8_t *currentPixel = getPixel(image, row, col);
-                if (currentPixel != NULL) { // TODO: not sure
+                if (currentPixel != NULL) {
                     neighboursGrayValues[n] = currentPixel[0];
                     n++;
                 }
             }
         }
     }
-
-
 
     float diffGrayNeighbours = 0;
     for (int actualNeighbours = 0; actualNeighbours < n; actualNeighbours++) {
@@ -368,11 +359,9 @@ float computeSimilarityFunction(Image image, int pixel, int *population, DesignP
                 (float) max(neighboursGrayValues[actualNeighbours], meanGrayValueClusters[clusterIndex]);
     }
 
-    float rho = (designParameters.a * diffGray) + (designParameters.b * diffGrayNeighbours);
-
-
-    return rho;
-
+    free(neighboursGrayValues);
+    free(meanGrayValueClusters);
+    return (designParameters.a * diffGray) + (designParameters.b * diffGrayNeighbours);
 }
 
 /**
@@ -419,6 +408,7 @@ int *selectionProcess(Image image, int *oldPopulation, int *evolvedPopulation, D
             newPopulation[currentPixel] = oldPopulation[currentPixel];
         }
     }
+
     return newPopulation;
 }/**
  * This functions returns an array of the gray values of the pixels that belong to a same cluster
@@ -438,6 +428,7 @@ int *obtainClusterGrayValues(Image image, int *population) {
         for (int i = 0; i < clusterSize; i++) {
             sum += grayscalesInCluster[i];
         }
+        free(grayscalesInCluster);
         clustersGrayValues[clust] = (clusterSize == 0) ? 0 : (sum / clusterSize);
     }
     return clustersGrayValues;
