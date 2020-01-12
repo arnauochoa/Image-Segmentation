@@ -20,8 +20,10 @@ int main() {
 
     Image image = buildImage(path);
     Image grayImage = convertImageToGrayScale(image);
+    free(image.pixels);
 
     Image segImage = segmentImage(grayImage);
+    free(grayImage.pixels);
 
     writeImage(segImage);
 

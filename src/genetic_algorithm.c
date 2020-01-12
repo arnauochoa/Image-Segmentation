@@ -36,7 +36,7 @@ int *getClusterIntensities(Image image, int *pixelIndices, int size);
 
 float computeSimilarityFunction(Image image, int pixel, int *population, DesignParameters designParameters);
 
-int *obtainClusterGrayValues(Image image, int *population);
+void obtainClusterGrayValues(Image image, int *population, int *clusterGrayValues);
 
 // Public functions
 Clusters getCluster() {
@@ -67,7 +67,7 @@ int *initializePopulation(Image image, DesignParameters designParameters) {
         }
     }
 
-    clusters.clusterGrayValues = obtainClusterGrayValues(image, population);
+     obtainClusterGrayValues(image, population, clusters.clusterGrayValues);
     printf("\n ============ END INITIALIZE ============ \n");
     // Return P(0)
     return population;
@@ -129,7 +129,7 @@ int *evolvePopulation(Image image, int *oldPopulation, DesignParameters designPa
     }
     // selection Process
     int *newPopulation = selectionProcess(image, oldPopulation, evolvedPopulation, designParameters);
-    clusters.clusterGrayValues = obtainClusterGrayValues(image, newPopulation);
+    obtainClusterGrayValues(image, newPopulation, clusters.clusterGrayValues);
 
     // Return newPopulation P(t+1)
     return newPopulation;
@@ -325,7 +325,8 @@ int findIndex(int value, int *array, int size) {
  */
 float computeSimilarityFunction(Image image, int pixel, int *population, DesignParameters designParameters) {
     int pixelGrayValue = image.pixels[pixel * NUM_CHANNELS];
-    int *meanGrayValueClusters = obtainClusterGrayValues(image, population);
+    int *meanGrayValueClusters = malloc(clusters.nClusters * sizeof(int));
+    obtainClusterGrayValues(image, population, meanGrayValueClusters);
     int pixelClusterLabel = population[pixel];
     int clusterIndex = findIndex(pixelClusterLabel, clusters.clusterIds, clusters.nClusters);
     if (clusterIndex == -1) {
@@ -359,8 +360,6 @@ float computeSimilarityFunction(Image image, int pixel, int *population, DesignP
         }
     }
 
-
-
     float diffGrayNeighbours = 0;
     for (int actualNeighbours = 0; actualNeighbours < n; actualNeighbours++) {
         diffGrayNeighbours +=
@@ -368,11 +367,10 @@ float computeSimilarityFunction(Image image, int pixel, int *population, DesignP
                 (float) max(neighboursGrayValues[actualNeighbours], meanGrayValueClusters[clusterIndex]);
     }
 
-    float rho = (designParameters.a * diffGray) + (designParameters.b * diffGrayNeighbours);
+    free(meanGrayValueClusters);
+    free(neighboursGrayValues);
 
-
-    return rho;
-
+    return (designParameters.a * diffGray) + (designParameters.b * diffGrayNeighbours);
 }
 
 /**
@@ -426,10 +424,10 @@ int *selectionProcess(Image image, int *oldPopulation, int *evolvedPopulation, D
  * @param population Chromosomes of the cluster
  * @return Array of the gray values
  */
-int *obtainClusterGrayValues(Image image, int *population) {
+void obtainClusterGrayValues(Image image, int *population, int *clusterGrayValues) {
     int imageSize = image.width * image.height;
     int clusterSize;
-    int *clustersGrayValues = malloc(clusters.nClusters * sizeof(int));
+    //int *clustersGrayValues = malloc(clusters.nClusters * sizeof(int));
     for (int clust = 0; clust < clusters.nClusters; ++clust) {
         int *pixelsInCluster = findPixelsInCluster(population, clusters.clusterIds[clust], imageSize, &clusterSize);
         int *grayscalesInCluster = getClusterIntensities(image, pixelsInCluster, clusterSize);
@@ -438,7 +436,6 @@ int *obtainClusterGrayValues(Image image, int *population) {
         for (int i = 0; i < clusterSize; i++) {
             sum += grayscalesInCluster[i];
         }
-        clustersGrayValues[clust] = (clusterSize == 0) ? 0 : (sum / clusterSize);
+        clusterGrayValues[clust] = (clusterSize == 0) ? 0 : (sum / clusterSize);
     }
-    return clustersGrayValues;
 }
