@@ -35,9 +35,9 @@ Image buildImage(char *path) {
             fillPixelFromArray(image, i, j, p);
 //            uint8_t *pix = getPixel(image, i, j);
 
-            //printf("(%d %d %d)\t\t", pix[0], pix[1], pix[2]); // Print for checking
+//            printf("(%d %d %d)\t\t", pix[0], pix[1], pix[2]); // Print for checking
         }
-        //printf("\n");
+//        printf("\n");
     }
 
     return image;
