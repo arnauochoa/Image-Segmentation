@@ -22,6 +22,7 @@ int main() {
     Image grayImage = convertImageToGrayScale(image);
 
     Image segImage = segmentImage(grayImage);
+    free(grayImage.pixels);
 
     writeImage(segImage);
 
