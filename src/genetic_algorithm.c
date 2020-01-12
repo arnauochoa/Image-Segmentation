@@ -348,9 +348,12 @@ float computeSimilarityFunction(Image image, int pixel, int *population, DesignP
                     neighboursGrayValues[n] = currentPixel[0];
                     n++;
                 }
+                free(currentPixel);
             }
         }
     }
+
+    free(pixelPosition);
 
     float diffGrayNeighbours = 0;
     for (int actualNeighbours = 0; actualNeighbours < n; actualNeighbours++) {
